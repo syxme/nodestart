@@ -1,0 +1,19 @@
+{
+  "name": "GalleryServer",
+  "version": "1.0.0",
+  "description": "Gallery",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodejs app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/syxme/nodestart.git"
+  },
+  "author": "syxme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/syxme/nodestart/issues"
+  },
+  "homepage": "https://github.com/syxme/nodestart"
+}
