@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+  	<title>SystemD3DX</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+    <script src="/js/app.js"></script>
+    <link rel="shortcut icon" href="http://pinturaslatas.com/s/misc/favicon.png">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body ng-app="FasterGet">
+  	<ul class="menubar grblack">
+	   	<li ng-class="isActive('/main')"><a href="/main">Main</a></li>
+	   	<li ng-class="isActive('/Console')"><a href="/Console">Console</a></li>
+	   	<li ng-class="isActive('/login')"><a href="/login">Login</a></li>
+	    <li ng-class="isActive('/about')"><a href="/about">About</a></li>
+	    <li ng-show="auth" ng-class="isActive('/about')"><a href="/exit">Exit</a></li>
+    </ul>
+    <div class="main">
+		<div class="block">
+			<div ng-view class="right">
+				
+			</div>
+		</div>    
+    </div>
+  </body>
+</html>
