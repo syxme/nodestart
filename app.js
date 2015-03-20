@@ -9,7 +9,7 @@ var session = require('express-session');
 
 app.set('views', './public');
 app.engine('html', cons.handlebars);
-app.set('view engine', 'html');
+app.set('view engine', 'hbs');
 
 app.use(express.static('public'));
 app.use(bodyParser.json()); // for parsing application/json
@@ -27,4 +27,5 @@ var port = process.env.OPENSHIFT_NODEJS_PORT || 2518 ;
 var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 //console.log(global);
 server.listen(port, ip);
+
 console.log("App Started:"+port);

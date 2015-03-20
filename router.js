@@ -1,4 +1,7 @@
 var fs = require('fs');
+var auth = require("./modules/authentication");
+var auths = new auth();
+
 var walk = function(dir, done) {
   var results = [];
   fs.readdir(dir, function(err, list) {
@@ -25,8 +28,9 @@ var walk = function(dir, done) {
 
 initApi = function(app) {
 var models = require("./models");
-var folder,api;
 
+var folder,api;
+  
 	walk("api", function(err, apis) { 
 		Object.keys(apis).forEach(function (num) {
 			folder	= apis[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
@@ -37,7 +41,17 @@ var folder,api;
   		});
 	});
 
-	app.get('*', function(req, res){ res.render("index");});
+
+
+
+
+	app.get('*', function(req, res){
+    if (auths.go(req)){
+      res.send("index");
+    }else {
+   res.render("index");
+ }
+ });
 };
 
 module.exports = initApi;
