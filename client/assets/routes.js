@@ -1,6 +1,6 @@
 app.config([
   "$routeProvider","$locationProvider", function($routeProvider,$locationProvider) {
-    $routeProvider.when("/main/", {
+    $routeProvider.when("/", {
       templateUrl: "/main.html",
       controller: "main"
     });
@@ -8,13 +8,15 @@ app.config([
       templateUrl: "/login.html",
       controller: "login"
     });
-    $routeProvider.when("/admin/", {
-      templateUrl: "/admin/index.html",
-      controller: "admin"
+    $routeProvider.when("/admin/users/", {
+      templateUrl: "/admin/users.html",
+      controller: "users"
     });
-    $routeProvider.when("/", {
-      redirectTo: "/login/"
-    });
+
     $locationProvider.html5Mode(true);
   }
+  // ,
+  // "RestangularProvider", function(RestangularProvider) {
+  //   return RestangularProvider.setBaseUrl("/api");
+  // }
 ]);

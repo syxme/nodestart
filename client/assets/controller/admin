@@ -1,5 +1,0 @@
-app.controller("login", [
-  "$scope", "$http", "$rootScope", function($scope, $http, $rootScope) {
-
- }
-]);

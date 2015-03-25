@@ -1,5 +1,5 @@
 
-var app = angular.module("FasterGet", ["ngRoute"]);
+var app = angular.module("FasterGet", ["ngRoute","restangular"]);
 
 app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
   $rootScope.isActive = function(path) {
@@ -9,12 +9,19 @@ app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location
       return "";
     }
   };
-  $http.post("api/users/auth").success(function(req) {
+  $http.post("/api/users/auth").success(function(req) {
     if (req.success){
       $rootScope.User = req.req;
       $rootScope.auth = true;
+
     }else{
       $rootScope.auth = false;
+      $location.path("/login/");
     }
   });
 }]);
+// app.config([
+//   "RestangularProvider", function(RestangularProvider) {
+//     RestangularProvider.setBaseUrl("/api");
+//   }
+// ]);
