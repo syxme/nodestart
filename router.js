@@ -43,15 +43,17 @@ var folder,api;
 
 
 
-
+  app.get('/admin/*', function(req, res){
+    console.log("admin");
+    res.render("indexadmin");
+  });
 
 	app.get('*', function(req, res){
-    if (auths.go(req)){
-      res.send("index");
-    }else {
-   res.render("index");
- }
- });
+    console.log("index")
+    res.render("index");
+
+  });
+
 };
 
 module.exports = initApi;
