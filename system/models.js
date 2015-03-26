@@ -12,9 +12,17 @@ ObjectId = Schema.Types.ObjectId;
     login:String,
     pass:String,
     photo: String,
-    type:{ type: Number, default: 1 }
+    type:{ type: Number, default: 1 },
+    lastip:{type:String,default:"0.0.0.0"}
+  });
+userSchema.statics.UpdateIp = function(req,login){
+  this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
+    if (err){
+      console.log("error :models.js: "+err);
+    }
   });
 
+};
   settingsSchema = new Schema({
     _id: {
       type: String,

@@ -20,8 +20,8 @@ app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location
     }
   });
 }]);
-// app.config([
-//   "RestangularProvider", function(RestangularProvider) {
-//     RestangularProvider.setBaseUrl("/api");
-//   }
-// ]);
+app.config([
+  "RestangularProvider", function(RestangularProvider) {
+   return RestangularProvider.setBaseUrl("/api/");
+  }
+]);

@@ -11544,11 +11544,11 @@ app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location
     }
   });
 }]);
-// app.config([
-//   "RestangularProvider", function(RestangularProvider) {
-//     RestangularProvider.setBaseUrl("/api");
-//   }
-// ]);
+app.config([
+  "RestangularProvider", function(RestangularProvider) {
+   return RestangularProvider.setBaseUrl("/api/");
+  }
+]);
 
 app.controller("admin", [
   "$scope", "$http", "$rootScope","$location", function($scope, $http, $rootScope,$location) {
@@ -11559,14 +11559,14 @@ app.controller("admin", [
 	
  }
 ]);
-app.controller("users", [
-  "$scope", "$http", "$rootScope","$location", function($scope, $http, $rootScope,$location) {
-  	$scope.auth = $rootScope.auth;
-  	if (!$scope.auth){
-  		$location.path("/login/");
-  	}
-	//s$scope.users = Restangular.all("users").getList();
- }
+app.controller("users", ["$scope", "$http", "$rootScope","$location","Restangular", 
+function($scope, $http, $rootScope,$location,Restangular) {
+	$scope.auth = $rootScope.auth;
+	if (!$scope.auth){
+		$location.path("/login/");
+	}
+	$scope.users = Restangular.all("users").getList().$object;
+}
 ]);
 app.controller("login", [
   "$scope", "$http", "$rootScope","$location", function($scope, $http, $rootScope,$location) {
@@ -11640,15 +11640,15 @@ app.controller("main", [
 app.config([
   "$routeProvider","$locationProvider", function($routeProvider,$locationProvider) {
     $routeProvider.when("/", {
-      templateUrl: "/main.html",
+      templateUrl: "/templates/main.html",
       controller: "main"
     });
     $routeProvider.when("/login/", {
-      templateUrl: "/login.html",
+      templateUrl: "/templates/login.html",
       controller: "login"
     });
     $routeProvider.when("/admin/users/", {
-      templateUrl: "/admin/users.html",
+      templateUrl: "/templates/users.html",
       controller: "users"
     });
 

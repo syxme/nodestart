@@ -1,0 +1,25 @@
+<div class="row-full">
+    <h2>Список пользователей</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Login</th>
+                    <th>Password</th>
+                    <th>Type</th>
+                    <th>ID</th>
+                    <th>LastIP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in users">
+                    <th>{{user.login}}</th>
+                    <th>{{user.pass}}</th>
+                    <th>{{user.type}}</th>
+                    <th>{{user._id}}</th>
+                    <th>{{user.lastip}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

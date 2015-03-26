@@ -1,7 +1,4 @@
 var fs = require('fs');
-var auth = require("./modules/authentication");
-var auths = new auth();
-
 var walk = function(dir, done) {
   var results = [];
   fs.readdir(dir, function(err, list) {
@@ -31,27 +28,32 @@ var models = require("./models");
 
 var folder,api;
   
-	walk("api", function(err, apis) { 
-		Object.keys(apis).forEach(function (num) {
-			folder	= apis[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
-	  		api = require("./"+apis[num]);  
+	walk("api", function(err, file) { 
+		Object.keys(file).forEach(function (num) {
+      console.log("===============FILE===============".yellow);
+      console.log("==->".green.bold+file[num]);
+			folder	= file[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
+	  	api = require("../"+file[num]);  
 			Object.keys(api).forEach(function (method) {
-	  			app[method]("/api/"+folder+'/'+api[method][0],api[method][1]);	
+          console.log ("======->".green+"Method:"+api[method][0]+" Param:"+api[method][1]+" path:"+"/api/"+folder+'/'+api[method][1]);
+          app[api[method][0]]("/api/"+folder+'/'+api[method][1],api[method][2]);	
+
 	  		});
   		});
 	});
 
 
 
-  app.get('/admin/*', function(req, res){
-    console.log("admin");
-    res.render("indexadmin");
-  });
 
-	app.get('*', function(req, res){
-    console.log("index")
-    res.render("index");
-
+  app.get('/admin/', function(req, res){res.render("indexadmin");});
+  app.get('/admin/:option/', function(req, res){res.render("indexadmin");});
+  app.get('/', function(req, res){res.render("index");});
+  app.get('/:option/', function(req, res,next){ 
+    if (req.params.option!="api"){
+        res.render("index");
+      }else{
+        next();
+      }
   });
 
 };
