@@ -7,7 +7,9 @@ var express	= require('express'),
 	cookieParser= require('cookie-parser'),
 	session		= require('express-session'),
 	client 		= redis.createClient(),
+	colors		= require('colors'),
 	redisStore	= require('connect-redis')(session);
+
 
 
 app.set('views', './public');
@@ -25,8 +27,8 @@ app.use(session(
 		saveUninitialized: false, 
 		resave: false 
 }));
-var config = require("./config");
-var routers = require("./router")(app);
+var config = require("./system/config");
+var routers = require("./system/router")(app);
 var port = process.env.OPENSHIFT_NODEJS_PORT || 2518 ;
 var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 //console.log(global);

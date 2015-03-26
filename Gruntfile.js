@@ -19,9 +19,13 @@ module.exports = function (grunt) {
 		app: {
 			files: {
 				"public/js/app.js": [
-          "bower_components/jquery/dist/jquery.js",
-          "bower_components/bootstrap/dist/js/bootstrap.js",
-          "client/assets/**/*.js"
+           "bower_components/jquery/dist/jquery.js",
+           "bower_components/bootstrap/dist/js/bootstrap.js",
+         //  "bower_components/angular/angular.js",
+          // "bower_components/angular-route/angular-route.js",
+           //"bower_components/lodash/dist/lodash.js",
+           "bower_components/restangular/restangular.js",
+           "client/assets/**/*.js"
 
 				]
 			}
