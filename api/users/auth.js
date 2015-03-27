@@ -1,13 +1,12 @@
-exports.post = ["auth", function(req, res) {
-	if (req.session.user_name){
-		models.User.findOne({login:req.session.user_name}, function(err, user) {
+exports.autentech = ["post","auth", function(req, res) {
+	if (req.session.user){
+		models.User.findOne({login:req.session.user.login}, function(err, user) {
 			if (err) {
 				res.json(err);
 			}else{
 				if (user){
-					req.session.user_name = user.login;
-					req.session.user_type = user.type;
 					config.user_type = user.type;
+					models.User.UpdateIp(req,user.login);
 					res.json({success:true,req:user});
 				}else{
 					res.json({success:false});
@@ -15,6 +14,6 @@ exports.post = ["auth", function(req, res) {
 			}
 		});
 	}else{
-		res.json({success:false});
+		res.json({success:false,module:"auth.js"});
 	}
 }];

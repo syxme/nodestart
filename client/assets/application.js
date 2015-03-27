@@ -2,7 +2,10 @@
 var app = angular.module("FasterGet", ["ngRoute","restangular"]);
 
 app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
-  $rootScope.isActive = function(path) {
+
+$rootScope.pageTitle = "Главная";
+
+  $rootScope.linc = function(path) {
     if ($location.path() == path) {
       return "active";
     } else {
@@ -20,8 +23,8 @@ app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location
     }
   });
 }]);
-// app.config([
-//   "RestangularProvider", function(RestangularProvider) {
-//     RestangularProvider.setBaseUrl("/api");
-//   }
-// ]);
+app.config([
+  "RestangularProvider", function(RestangularProvider) {
+   return RestangularProvider.setBaseUrl("/api/");
+  }
+]);

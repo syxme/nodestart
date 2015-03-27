@@ -1,4 +1,4 @@
-exports.post = ["login", function(req, res) {
+exports.login = ["post","login", function(req, res) {
 	var data = req.body;
 	 models.User.findOne({login:data.login}, function(err, user) {
 		if (err) {
@@ -6,12 +6,9 @@ exports.post = ["login", function(req, res) {
 		}else{
 			if (user){
 				if (user.pass == data.pass){
-					req.session.user_name = user.login;
-					req.session.user_type = user.type;
-					config.user_type = user.type;
-					console.log(req.session);
-					res.json({success:true,req:user});
-					
+					req.session.user = user;
+					models.User.UpdateIp(req,user.login);
+					res.json({success:true,req:user});				
 				}else{
 					res.json({success:false});
 				}
@@ -21,7 +18,11 @@ exports.post = ["login", function(req, res) {
 		}
     });
 }];
-exports.put = ["exit", function(req, res) {
-	delete req.session.user_name;
+exports.exit = ["get","exit", function(req, res) {
+	delete req.session.user;
 	res.json({success:true});
+}];
+exports.done = ["get","done", function(req, res) {
+	console.log("done");
+	res.json({success:"dooooone"});
 }];

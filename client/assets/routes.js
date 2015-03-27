@@ -1,15 +1,15 @@
 app.config([
   "$routeProvider","$locationProvider", function($routeProvider,$locationProvider) {
     $routeProvider.when("/", {
-      templateUrl: "/main.html",
+      templateUrl: "/templates/main.html",
       controller: "main"
     });
     $routeProvider.when("/login/", {
-      templateUrl: "/login.html",
+      templateUrl: "/templates/login.html",
       controller: "login"
     });
     $routeProvider.when("/admin/users/", {
-      templateUrl: "/admin/users.html",
+      templateUrl: "/templates/users.html",
       controller: "users"
     });
 

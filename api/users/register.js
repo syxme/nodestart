@@ -1,4 +1,4 @@
-exports.post = ["register", function(req, res) {
+exports.register = ["post","register", function(req, res) {
 	var data = req.body;
 	models.User.findOne({login:data.login}, function(err, user) {
 		if (!user){

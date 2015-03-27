@@ -9,7 +9,11 @@ module.exports = function (grunt) {
         },
         files: {
             "public/css/app.css": [
-              "public/css/style.css"
+              "public/css/grunt/style.css",
+              "public/css/grunt/bootstrap.css",
+              "public/css/grunt/sb-admin.css",
+              "public/css/grunt/plugins/mirrors.css",
+              "public/css/grunt/font-a/css/font-awesome.min.css"
               ]
         }
       }
@@ -19,9 +23,13 @@ module.exports = function (grunt) {
 		app: {
 			files: {
 				"public/js/app.js": [
-          "bower_components/jquery/dist/jquery.js",
-          "bower_components/bootstrap/dist/js/bootstrap.js",
-          "client/assets/**/*.js"
+           "bower_components/jquery/dist/jquery.js",
+           "bower_components/bootstrap/dist/js/bootstrap.js",
+           "node_modules/angular/angular.js",
+           "node_modules/angular-route/angular-route.js",
+           "bower_components/lodash/dist/lodash.js",
+           "bower_components/restangular/dist/restangular.js",
+           "client/assets/**/*.js"
 
 				]
 			}
@@ -35,10 +43,13 @@ module.exports = function (grunt) {
         },
         files: {
           "public/js/app.js": [
-            "bower_components/jquery/dist/jquery.js",
-            "bower_components/bootstrap/dist/js/bootstrap.js",
-  				  "client/assets/**/*.js"
-            
+           "bower_components/jquery/dist/jquery.js",
+           "bower_components/bootstrap/dist/js/bootstrap.js",
+           "node_modules/angular/angular.js",
+           "node_modules/angular-route/angular-route.js",
+           "bower_components/lodash/dist/lodash.js",
+           "bower_components/restangular/dist/restangular.js",
+           "client/assets/**/*.js"     
 			    ]
         }
       }
