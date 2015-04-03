@@ -4,13 +4,67 @@
 			<div class="panel-body">
 				<div class="col-md-8">
 					<div class="well">
-						Panel content
+						<form class="form-horizontal">
+					        <div class="form-group">
+					          <label for="inputEmail3" class="col-sm-3 control-label">Momey</label>
+					          <div class="col-sm-8">
+					            <input type="text" ng-model="data.money" class="form-control" placeholder="Momey">
+					          </div>
+					        </div>
+					        <div class="form-group">
+					          <label for="inputPassword3" class="col-sm-3 control-label">inDate</label>
+					          <div class="col-sm-8">
+					            <input type="text" ng-model="data.GetMoney" class="form-control" placeholder="2015.12.31">
+					          </div>
+					        </div>
+					        <div class="form-group">
+					          <label for="inputPassword3" class="col-sm-3 control-label">GetnextMoney</label>
+					          <div class="col-sm-8">
+					            <input type="text" ng-model="data.GetnextMoney" class="form-control" placeholder="2015.12.31">
+					          </div>
+					        </div>
+
+							<div class="form-group">
+					          <label for="inputPassword3" class="col-sm-3 control-label">Потратить</label>
+					          <div class="col-sm-8">
+					            <input type="text" ng-model="payout" class="form-control" placeholder="100">
+					          </div>
+					        </div>
+
+					        <div class="form-group">
+					          <div class="col-sm-offset-3 col-sm-9">
+					            <button type="submit" ng-click="Update()" class="btn btn-success">UPDATE</button>
+					          </div>
+					        </div>
+					        <div class="form-group">
+					          <div class="col-sm-offset-3 col-sm-9">
+					            <button type="submit" ng-click="Payout()" class="btn btn-success">Payout</button>
+					          </div>
+					        </div>
+					      </form>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="well">
-						Panel content
+						<form class="form-horizontal">
+							<div class="form-group">
+					          <div class="col-sm-9">
+					            <label  class="control-label">Осталось жить:{{days}} дней</label>
+					          </div>
+					        </div>
+					        <div class="form-group">
+					          <div class="col-sm-9">
+					            <label class="control-label">{{daymoney}} рублей в день.</label>
+					          </div>
+					        </div>
+					        <div class="form-group">
+					          <div class="col-sm-9">
+					            <label  class="control-label">{{daysx}}</label>
+					          </div>
+					        </div>
+
+				        </form>
 					</div>
 				</div>
 				

@@ -1,5 +1,6 @@
 var fs = require('fs'),
-	models = require("./models"),
+	models	= require("./models"),
+	async	= require("async")
 	scanApi = require("./utils");
 
 initApi = function(app) {
@@ -18,7 +19,20 @@ initApi = function(app) {
 		});
 	});
 
-	app.get('/admin/', function(req, res){res.render("index-admin");});
+	app.get('/admin/', function(req, res){
+		console.log("admin!")
+		async.parallel({
+			funcA:function(cb){
+				cb(null,"funcArg5h");
+			},
+			funcb:function(cb){
+				cb(null,"222222");
+			}
+		},function(err, results){
+			console.log(results);
+		});
+		res.render("index-admin");
+	});
 	app.get('/admin/:option/', function(req, res){res.render("index-admin");});
 	app.get('/', function(req, res){res.render("index");});
 	app.get('/:option/', function(req, res,next){ 

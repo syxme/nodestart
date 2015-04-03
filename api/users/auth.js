@@ -5,7 +5,7 @@ exports.autentech = ["post","auth", function(req, res) {
 				res.json(err);
 			}else{
 				if (user){
-					config.user_type = user.type;
+					config.user = user;
 					models.User.UpdateIp(req,user.login);
 					res.json({success:true,req:user});
 				}else{

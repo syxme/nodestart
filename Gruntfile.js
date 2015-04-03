@@ -27,6 +27,7 @@ module.exports = function (grunt) {
            "bower_components/bootstrap/dist/js/bootstrap.js",
            "node_modules/angular/angular.js",
            "node_modules/angular-route/angular-route.js",
+           "node_modules/angular-animate/angular-animate.js",
            "bower_components/lodash/dist/lodash.js",
            "bower_components/restangular/dist/restangular.js",
            "client/assets/**/*.js"
@@ -47,6 +48,7 @@ module.exports = function (grunt) {
            "bower_components/bootstrap/dist/js/bootstrap.js",
            "node_modules/angular/angular.js",
            "node_modules/angular-route/angular-route.js",
+           "bower_components/angular-animate/angular-animate.js",
            "bower_components/lodash/dist/lodash.js",
            "bower_components/restangular/dist/restangular.js",
            "client/assets/**/*.js"     
