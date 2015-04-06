@@ -44398,6 +44398,7 @@ var app = angular.module("FasterGet", ["ngRoute","ngAnimate","restangular"]);
 
 app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
 
+
 $rootScope.pageTitle = "Главная";
 
   $rootScope.linc = function(path) {
@@ -44418,7 +44419,21 @@ $rootScope.pageTitle = "Главная";
     }
   });
 }]);
-
+app.filter('dateforms', [function() {
+    return function (dateforms) { 
+      var year = new Date(dateforms).getFullYear();
+      var month =  new Date(dateforms).getMonth()+1;
+      var day = new Date(dateforms).getDate();
+        var monthNames = [ 'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
+            'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'декабря' ];
+        return day+" "+monthNames[month]+" "+year+" Года";
+    }
+}]);
+app.filter('ocr', [function() {
+    return function (ocr) { 
+        return Math.round((ocr*100)/100);
+    }
+}]);
 ///
 Date.daysBetween = function ( date1, date2 ) {
   //Get 1 day in milliseconds
@@ -44457,7 +44472,7 @@ function($scope, $http, $rootScope,$location,Restangular) {
 }
 ]);
 app.controller("login", [
-  "$scope", "$http", "$rootScope","$location", function($scope, $http, $rootScope,$location) {
+  "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
   	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
   		$location.path("/");
@@ -44484,9 +44499,11 @@ app.controller("login", [
 		}
 	}
 	$scope.exit = function() {
-		$http.put("/api/users/exit").success(function(req) {
+		$http.get("/api/users/exit").success(function(req) {
 			if (req.success){	
 				$rootScope.auth = $scope.auth = false;	
+				$window.location.reload();
+
 			}else{
 				$scope.info = "Error";
 			}
@@ -44522,15 +44539,16 @@ app.controller("login", [
 app.controller("main", [
   "$scope", "$http", function($scope, $http) {
   	$scope.data = {};	
+  	$scope.nowDate = new Date();	
   	var dataDays = {};
   	var updateStatus = function(){
 	  	$http.post("/api/daymoney/get").success(function(req) {
-			if (req.success){	
+			if (req.success&& req.response.data!=null){	
 				dataDays = req.response.data;
 				$scope.data.GetnextMoney = Date.strFormat(dataDays.GetnextMoney)
 				$scope.data.GetMoney = Date.strFormat(dataDays.GetMoney);
 				$scope.data.money = dataDays.money;
-				calculation();
+				calculation(req.response.payout);
 			}else{
 				$scope.info = "Error: Чувак не найден!";
 			}
@@ -44538,30 +44556,76 @@ app.controller("main", [
   	}
   	
 
-	var calculation = function(){
+	var calculation = function(trans){
 		var days = Date.daysBetween(new Date(dataDays.GetnextMoney),new Date());
+		var tmp;	
+		$scope.data.transaction = [];
 		days = days * -1
 		$scope.days = days;
-		$scope.daymoney =Math.round((dataDays.money / days)*100)/100;
-	}
-	$scope.Payout = function(){
-		var data = {};
-		data.money = $scope.payout;
-		data.date = new Date();
-		$http.post("/api/daymoney/payout",{data:data}).success(function(req) {
-			if (req.success){	
-				console.log("ok");
-			}else{
-				$scope.info = "Error: Чувак не найден!";
+		$scope.daymoney = Math.round((dataDays.money / days)*100)/100;
+		$scope.daysx = $scope.daymoney
+		$scope.outmoney = dataDays.money;
+		trans.forEach(function(day){
+			tmp = new Date(day.date).getDate()+"."+new Date(day.date).getMonth();
+			if (tmp == new Date().getDate()+"."+new Date().getMonth()){
+				tmp = angular.copy(day);
+				if (tmp.money>0){
+					tmp.money = tmp.money  *-1;
+				}else{
+					tmp.money = tmp.money.replace(/\-/g, "+");
+				}
+				
+				$scope.data.transaction.push(tmp);
+				$scope.daysx -= day.money;
 			}
-		});	
+			$scope.outmoney -= day.money;
+		});
+		$scope.daymoney = $scope.outmoney/ days;
 
 	}
+
+
+	$scope.removeTrans = function(id){
+		console.log(id);
+		$http.post("/api/daymoney/rmtr",{id:id}).success(function(req) {
+				if (req.success){	
+					console.log("rmtr:ok");
+					updateStatus();
+				}else{
+					$scope.info = "Error";
+				}
+			});
+	}
+
+
+	$scope.Payout = function(ins){
+		var data = {};
+		data.money = $scope.payout;
+		if(ins){
+			data.money = data.money *-1;
+		}
+		
+		data.date = new Date();
+		if ($scope.payout!=null){
+			$http.post("/api/daymoney/payout",{data:data}).success(function(req) {
+				if (req.success){	
+					console.log("payout:ok");
+					updateStatus();
+				}else{
+					$scope.info = "Error";
+				}
+			});
+		}else{
+			console.log("error payout");
+		}
+	}
+
  	$scope.Update = function(){
  		var data = $scope.data;
  		if (data.GetMoney && data.GetnextMoney && data.money != null){
  			data.GetMoney = data.GetMoney.replace(/\./g, "-");
  			data.GetnextMoney = data.GetnextMoney.replace(/\./g, "-");
+
 			$http.post("/api/daymoney/update",{data:data}).success(function(req) {
 				if (req.success){	
 					updateStatus();

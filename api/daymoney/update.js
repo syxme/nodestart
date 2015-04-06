@@ -24,8 +24,21 @@ exports.get = ["post","get", function(req, res) {
 exports.payout = ["post","payout", function(req, res) {
 	var id = req.session.user._id;
 	var data = req.body.data;
-	console.log(data);
-	models.DayMon.update({_id:id},{payout:{$push:data}}, function(err, r) {
+
+	models.DayMon.update({_id:id},{"$push":{"payout":data}}, function(err, r) {
+		if (!err) {
+			res.json({success:true,response:r});
+		}else{
+			res.json({success:false,response:err});
+		}
+
+	});
+}];
+exports.rmtr = ["post","rmtr", function(req, res) {
+	var id = req.session.user._id;
+	var id_rm = req.body.id;
+
+	models.DayMon.update({_id:id},{"$pull":{"payout":{"_id":id_rm}}}, function(err, r) {
 		if (!err) {
 			res.json({success:true,response:r});
 		}else{

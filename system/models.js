@@ -8,6 +8,9 @@ ObjectId = Schema.Types.ObjectId;
   //0:guest
   //1:user
   //2:admin
+
+
+  
   userSchema = new Schema({
     login:String,
     pass:String,
@@ -27,14 +30,13 @@ ObjectId = Schema.Types.ObjectId;
       GetnextMoney:Date
     }
   });
-userSchema.statics.UpdateIp = function(req,login){
-  this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
-    if (err){
-      console.log("error :models.js: "+err);
-    }
-  });
-
-};
+  userSchema.statics.UpdateIp = function(req,login){
+    this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
+      if (err){
+        console.log("error :models.js: "+err);
+      }
+    });
+  };
   settingsSchema = new Schema({
     _id: {
       type: String,

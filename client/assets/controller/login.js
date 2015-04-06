@@ -1,5 +1,5 @@
 app.controller("login", [
-  "$scope", "$http", "$rootScope","$location", function($scope, $http, $rootScope,$location) {
+  "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
   	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
   		$location.path("/");
@@ -26,9 +26,11 @@ app.controller("login", [
 		}
 	}
 	$scope.exit = function() {
-		$http.put("/api/users/exit").success(function(req) {
+		$http.get("/api/users/exit").success(function(req) {
 			if (req.success){	
 				$rootScope.auth = $scope.auth = false;	
+				$window.location.reload();
+
 			}else{
 				$scope.info = "Error";
 			}

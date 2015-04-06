@@ -3,6 +3,7 @@ var app = angular.module("FasterGet", ["ngRoute","ngAnimate","restangular"]);
 
 app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
 
+
 $rootScope.pageTitle = "Главная";
 
   $rootScope.linc = function(path) {
@@ -23,7 +24,21 @@ $rootScope.pageTitle = "Главная";
     }
   });
 }]);
-
+app.filter('dateforms', [function() {
+    return function (dateforms) { 
+      var year = new Date(dateforms).getFullYear();
+      var month =  new Date(dateforms).getMonth()+1;
+      var day = new Date(dateforms).getDate();
+        var monthNames = [ 'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
+            'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'декабря' ];
+        return day+" "+monthNames[month]+" "+year+" Года";
+    }
+}]);
+app.filter('ocr', [function() {
+    return function (ocr) { 
+        return Math.round((ocr*100)/100);
+    }
+}]);
 ///
 Date.daysBetween = function ( date1, date2 ) {
   //Get 1 day in milliseconds

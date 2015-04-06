@@ -1,24 +1,33 @@
 <div class="white">
 	<div class="container">
 		<div class="panel panel-default">
+			<div class="panel-heading">
+			<div class="row">
+				<div class="col-sm-5"><h4>Жизненный калькулятор</h4></div>
+				<div class="col-sm-6"></div>
+				<div class="col-sm-1">
+					<button type="submit" ng-controller="login" ng-click="exit()" class="btn btn-success pull-right">X </button>
+				</div>
+			</div>
+			</div>	
 			<div class="panel-body">
 				<div class="col-md-8">
 					<div class="well">
 						<form class="form-horizontal">
 					        <div class="form-group">
-					          <label for="inputEmail3" class="col-sm-3 control-label">Momey</label>
+					          <label for="inputEmail3" class="col-sm-3 control-label">Зарплата</label>
 					          <div class="col-sm-8">
 					            <input type="text" ng-model="data.money" class="form-control" placeholder="Momey">
 					          </div>
 					        </div>
 					        <div class="form-group">
-					          <label for="inputPassword3" class="col-sm-3 control-label">inDate</label>
+					          <label for="inputPassword3" class="col-sm-3 control-label">Получил зарплату</label>
 					          <div class="col-sm-8">
 					            <input type="text" ng-model="data.GetMoney" class="form-control" placeholder="2015.12.31">
 					          </div>
 					        </div>
 					        <div class="form-group">
-					          <label for="inputPassword3" class="col-sm-3 control-label">GetnextMoney</label>
+					          <label for="inputPassword3" class="col-sm-3 control-label">Следующая зарплата</label>
 					          <div class="col-sm-8">
 					            <input type="text" ng-model="data.GetnextMoney" class="form-control" placeholder="2015.12.31">
 					          </div>
@@ -33,15 +42,25 @@
 
 					        <div class="form-group">
 					          <div class="col-sm-offset-3 col-sm-9">
-					            <button type="submit" ng-click="Update()" class="btn btn-success">UPDATE</button>
-					          </div>
-					        </div>
-					        <div class="form-group">
-					          <div class="col-sm-offset-3 col-sm-9">
-					            <button type="submit" ng-click="Payout()" class="btn btn-success">Payout</button>
+					            <button type="submit" ng-click="Update()" class="btn btn-info">Обновить данные о зарплате</button>
+					          	 <button type="submit" ng-click="Payout(false)" class="btn btn-warning">Потратить</button>
+					          	 <button type="submit" ng-click="Payout(true)" class="btn btn-success">Добавить</button>
 					          </div>
 					        </div>
 					      </form>
+					</div>
+					
+					<div class="well">
+						<div class="form-group">
+							<label class="control-label">Транзакции на {{nowDate|dateforms}}</label>
+						</div>
+						<div class="row">
+						<div class="btn-group col-sm-12" role="group" ng-repeat="x in data.transaction" aria-label="...">
+							<button type="button" class="btn col-sm-3 btn-default">{{x.date|date:'HH:mm'}}</button>
+							<button type="button" class="btn col-sm-8 btn-default"><b>{{x.money}}</b></button>
+							<button type="button" ng-click="removeTrans(x._id)" class="btn col-sm-1 btn-default">X</button>
+						</div>
+						</div>
 					</div>
 				</div>
 
@@ -55,15 +74,19 @@
 					        </div>
 					        <div class="form-group">
 					          <div class="col-sm-9">
-					            <label class="control-label">{{daymoney}} рублей в день.</label>
+					            <label  class="control-label">Осталось Денег:{{outmoney|ocr}}</label>
 					          </div>
 					        </div>
 					        <div class="form-group">
 					          <div class="col-sm-9">
-					            <label  class="control-label">{{daysx}}</label>
+					            <label class="control-label">{{daymoney|ocr}} рублей в день.</label>
 					          </div>
 					        </div>
-
+					        <div class="form-group">
+					          <div class="col-sm-9">
+					            <label  class="control-label">{{daysx|ocr}}р. осталось на сегодня</label>
+					          </div>
+					        </div>
 				        </form>
 					</div>
 				</div>
