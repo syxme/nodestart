@@ -5,12 +5,12 @@ ObjectId = Schema.Types.ObjectId;
 
  var settingsSchema, userSchema;
   mongoose.connect("mongodb://localhost:27017/syxme");
+  //mongoose.connect("mongodb://admin:VWSsE7s7W_fS@"+process.env.OPENSHIFT_MONGODB_DB_HOST+":27017/syxme");
+
   //0:guest
   //1:user
   //2:admin
 
-
-  
   userSchema = new Schema({
     login:String,
     pass:String,
