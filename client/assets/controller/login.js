@@ -1,6 +1,6 @@
 app.controller("login", [
-  "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
-  	$scope.auth = $rootScope.auth;
+"$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
   		$location.path("/");
   	}

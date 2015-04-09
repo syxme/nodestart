@@ -20,6 +20,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
+//openshift app.use(session({ secret: "dfI3dD43220jhsdjjjsdkoen" }));
 app.use(session(
 	{
 		secret: '4815162342x1x2', 

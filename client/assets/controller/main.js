@@ -16,17 +16,29 @@ app.controller("main", [
 			}
 		});		
   	}
-  	
 
 	var calculation = function(trans){
 		var days = Date.daysBetween(new Date(dataDays.GetnextMoney),new Date());
 		var tmp;	
 		$scope.data.transaction = [];
+		$scope.data.transactionAll = [];
+		$scope.outmoney = dataDays.money;
+		trans.forEach(function(day){
+			$scope.outmoney -= day.money; 
+			tmp = angular.copy(day);
+			if (tmp.money>0){
+				tmp.money = tmp.money  *-1;
+			}else{
+				tmp.money = tmp.money.replace(/\-/g, "+");
+			}
+			$scope.data.transactionAll.push(day);
+		});
+
 		days = days * -1
 		$scope.days = days;
-		$scope.daymoney = Math.round((dataDays.money / days)*100)/100;
-		$scope.daysx = $scope.daymoney
-		$scope.outmoney = dataDays.money;
+		$scope.daymoney = Math.round(($scope.outmoney / days)*100)/100;
+		$scope.daysx = $scope.daymoney;
+
 		trans.forEach(function(day){
 			tmp = new Date(day.date).getDate()+"."+new Date(day.date).getMonth();
 			if (tmp == new Date().getDate()+"."+new Date().getMonth()){
@@ -36,15 +48,22 @@ app.controller("main", [
 				}else{
 					tmp.money = tmp.money.replace(/\-/g, "+");
 				}
-				
 				$scope.data.transaction.push(tmp);
 				$scope.daysx -= day.money;
 			}
-			$scope.outmoney -= day.money;
+		
 		});
 		$scope.daymoney = $scope.outmoney/ days;
 
+		if ($scope.daysx<0){
+			$scope.daysx = 0;
+			$scope.infoBlock  = {'box-shadow': '0px 0px 13px 1px #F00'};
+		}else{
+			$scope.infoBlock  = {'box-shadow': '0px 0px 13px 1px #CBFFCE'};
+		}
+
 	}
+
 
 
 	$scope.removeTrans = function(id){
