@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var walk = function(dir, done) {
+var walk = function(dir, done) { 
   var results = [];
   fs.readdir(dir, function(err, list) {
     if (err) return done(err);

@@ -19,7 +19,7 @@ ObjectId = Schema.Types.ObjectId;
     lastip:{type:String,default:"0.0.0.0"}
   });
   daymonSchema = new Schema({
-    _id:{ type: String, ref: "User" },
+    id:{ type: String, ref: "User" },
     payout:[{
       date:Date,
       money:String
@@ -38,7 +38,7 @@ ObjectId = Schema.Types.ObjectId;
     });
   };
   settingsSchema = new Schema({
-    _id: {
+    id: {
       type: String,
       unique: true
     },
