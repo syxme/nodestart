@@ -3,11 +3,16 @@ var fs = require('fs'),
 	async	= require("async")
 	scanApi = require("./utils");
 
-var checkUser = function (req,res,next){
-    arguments.callee.exec(req,res);
-	
+var admin 	= function(req,res){res.send("index-admin");}
+var index	= function(req,res){res.send("index");}
+var check	= function(req,res,next){
+	if (req.session.user)
+		next();
+	else
+		res.redirect('/login');
 }
-initApi = function(app) {
+
+initializationRoute = function(app) {
 	var folder,api;
 
 	scanApi("api", function(err, file) { 
@@ -17,19 +22,17 @@ initApi = function(app) {
 			folder	= file[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
 			api = require("../"+file[num]);
 			Object.keys(api).forEach(function (i) {
-				console.log ("======->".green+"method:"+api[i].method+" params:"+api[i].name+" path:"+"/api/"+folder+'/'+api[i].name);		
-				app[api[i].method]("/api/"+folder+'/'+api[i].name,api[i].execute);	
-			
+				console.log ("======->".green+"method:"+api[i].method+" Name:"+api[i].name+" path:"+"/api/"+folder+'/'+api[i].name);		
+				app[api[i].method]("/api/"+folder+'/'+api[i].name,api[i].execute);				
 			});
 		});
 	});
 
-	app.get('/admin/', function(req, res){res.render("index-admin");});
-	app.get('/admin/:option/', function(req, res){res.render("index-admin");});
-	app.get('/', function(req, res){res.render("index");});
-	app.get('/:option/', function(req, res,next){ 
-		if (req.params.option!="api"){
-			console.log(req.route.stack);
+	app.get('/admin/', admin);
+	app.get('/admin/:option/', admin);
+	app.get('/', index);
+	app.get('/:page/', function(req, res,next){ 
+		if (req.params.page!="api"){
 			res.render("index");
 		}else{
 			next();
@@ -38,4 +41,4 @@ initApi = function(app) {
 
 };
 
-module.exports = initApi;
+module.exports = initializationRoute;
