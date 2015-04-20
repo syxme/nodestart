@@ -22,4 +22,17 @@ var walk = function(dir, done) {
     });
   });
 };
-module.exports = walk;
+var fname = function(x){
+  return x.substring(x.lastIndexOf('/')+1,x.length);
+}
+var frs = function(x){
+  var name = x.substring(x.lastIndexOf('/')+1,x.length);
+  return name.substring(x.lastIndexOf(".")+1,name.length);
+  
+}
+var fx = {
+  walk:walk,
+  fn:fname,
+  frs:frs
+}
+module.exports = fx;

@@ -33,6 +33,8 @@ var routers = require("./system/router")(app);
 var port = process.env.OPENSHIFT_NODEJS_PORT || 2518 ;
 var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 //console.log(global);
+
+
 server.listen(port, ip);
 
 console.log("App Started:"+port);

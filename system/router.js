@@ -2,40 +2,19 @@ var fs = require('fs'),
 	models	= require("./models"),
 	async	= require("async")
 	scanApi = require("./utils");
-
-var checkUser = function (req,res,next){
-    arguments.callee.exec(req,res);
+	var engine = {};
+	var compile = new require("./compileModules");
 	
-}
 initApi = function(app) {
-	var folder,api;
-
-	scanApi("api", function(err, file) { 
-		Object.keys(file).forEach(function (num) {
-			console.log("==============================FILE==============================".yellow);
-			console.log("==->".green.bold+file[num]);
-			folder	= file[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
-			api = require("../"+file[num]);
-			Object.keys(api).forEach(function (i) {
-				console.log ("======->".green+"method:"+api[i].method+" params:"+api[i].name+" path:"+"/api/"+folder+'/'+api[i].name);		
-				app[api[i].method]("/api/"+folder+'/'+api[i].name,api[i].execute);	
-			
-			});
+	compile.ex(function(e){
+		module.exports = Engine = e;		
+		context.index.render("s",function(s,q){
+		});
+		Object.keys(e.controllers).forEach(function (i) {
+			console.log(e.controllers[i].path);
+			app.get(e.controllers[i].path, e.controllers[i].execute);
 		});
 	});
-
-	app.get('/admin/', function(req, res){res.render("index-admin");});
-	app.get('/admin/:option/', function(req, res){res.render("index-admin");});
-	app.get('/', function(req, res){res.render("index");});
-	app.get('/:option/', function(req, res,next){ 
-		if (req.params.option!="api"){
-			console.log(req.route.stack);
-			res.render("index");
-		}else{
-			next();
-		}
-	});
-
 };
 
 module.exports = initApi;
