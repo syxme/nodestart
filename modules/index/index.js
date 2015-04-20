@@ -1,21 +1,27 @@
 var async = require("async");
 var index = function(){
    var ctx = {
-   		title:"FUCK FUCK"
-   }
-   
+   		text:[{login:"YES"}]
+   };
 }
-
+index.prototype.get = function(callback){
+   var ctx = {
+   		text:[{login:"YES"}]
+   };
+   callback(ctx);
+}
 index.prototype.render = function(req,callback){
 	ctx = {
-		title:"TUTLE"
+		title:"TUTLE",
+		text:"HEADER"
 	}
-	
+
 	//console.log(engine.tpl);
 	async.auto({
-		index:function(cb,results){ models.User.find({}).exec(cb)}
+		users:function(cb,results){ models.User.find({}).exec(cb)}
 	},function(err,results){
-		ctx.header = results.index;
+		ctx.text = results.users;
+		ctx.header = Engine.tpl.index_header(ctx);
 		callback(err,ctx);
 	});
 }

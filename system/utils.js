@@ -25,14 +25,20 @@ var walk = function(dir, done) {
 var fname = function(x){
   return x.substring(x.lastIndexOf('/')+1,x.length);
 }
+var hbsName = function(x){
+  var t = x.substring(x.indexOf('/')+1,x.length);
+  t = t.substring(t.length-4,0);
+  return t.replace('/',"_");
+}
 var frs = function(x){
   var name = x.substring(x.lastIndexOf('/')+1,x.length);
-  return name.substring(x.lastIndexOf(".")+1,name.length);
+  return name.substring(name.lastIndexOf(".")+1,name.length);
   
 }
 var fx = {
   walk:walk,
   fn:fname,
-  frs:frs
+  frs:frs,
+  hbsName:hbsName
 }
 module.exports = fx;
