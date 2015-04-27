@@ -1,5 +1,5 @@
 
-var app = angular.module("FasterGet", ["ngRoute","ngAnimate","restangular"]);
+var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular"]);
 
 app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
 
@@ -13,16 +13,16 @@ $rootScope.pageTitle = "Главная";
       return "";
     }
   };
-  $http.post("/api/users/auth").success(function(req) {
-    if (req.success){
-      $rootScope.User = req.req;
-      $rootScope.auth = true;
+  // $http.post("/api/users/auth").success(function(req) {
+  //   if (req.success){
+  //     $rootScope.User = req.req;
+  //     $rootScope.auth = true;
 
-    }else{
-      $rootScope.auth = false;
-      $location.path("/login/");
-    }
-  });
+  //   }else{
+  //     $rootScope.auth = false;
+  //     $location.path("/login/");
+  //   }
+  //});
 }]);
 app.filter('dateforms', [function() {
     return function (dateforms) { 

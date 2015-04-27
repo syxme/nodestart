@@ -18,18 +18,7 @@ ObjectId = Schema.Types.ObjectId;
     type:{ type: Number, default: 1 },
     lastip:{type:String,default:"0.0.0.0"}
   });
-  daymonSchema = new Schema({
-    id:{ type: String, ref: "User" },
-    payout:[{
-      date:Date,
-      money:String
-    }],
-    data:{
-      money:String,
-      GetMoney:Date,
-      GetnextMoney:Date
-    }
-  });
+
   userSchema.statics.UpdateIp = function(req,login){
     this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
       if (err){
@@ -47,7 +36,6 @@ ObjectId = Schema.Types.ObjectId;
   
 models = {
     User: mongoose.model("User", userSchema),
-    DayMon: mongoose.model("DayMon", daymonSchema),
     Settings: mongoose.model("Settings", settingsSchema),
  };
   
