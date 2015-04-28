@@ -1,0 +1,140 @@
+<div class="content container registration">
+	<div id="registration-form">
+	    <div class="module">
+	        <form action="" method="POST" class="ui-form" id="entry">
+	            <fieldset>
+	            <button style="height:50px"ng-click="checkfield()"></button>
+	                <h5>Расскажите нам о себе</h5>
+	                <h8 class="required-desc">* Обязательное поле</h8>
+	                <ul class="entry-group">
+	                    <li ng-class="{error: errors.firstname}">
+	                        <label class="alpha grid_3">* Имя</label>
+	                        <input class="group-input omega reg" ng-model="data.firstname" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.firstname}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                    <li ng-class="{error: errors.lastname}">
+	                        <label class="alpha grid_3">* Фамилия</label>
+	                        <input class="group-input omega reg" ng-model="data.lastname" type="text" value="">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.lastname}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                    <li ng-class="{error: errors.email}">
+	                        <label class="alpha grid_3">* Электронная почта</label>
+	                        <input class="group-input omega reg" ng-model="data.email" type="text" value="">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.email}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                </ul>
+	            </fieldset>
+	            <fieldset>
+	                <h5>
+	                    Где вы находитесь?
+	                </h5>
+	                <ul class="entry-group">
+	                    <li>
+	                        <label class="alpha grid_3" for="Company">Название компании</label>
+	                        <input class="group-input omega normal" data-val="true" id="Company" name="Company" type="text" value="" maxlength="30">
+	                        <div class="clear">
+	                        </div>
+	                    </li>
+	                    <li  ng-class="{error: errors.adress}">
+	                        <label class="alpha grid_3">* Адрес</label>
+	                        <input class="group-input omega normal" ng-model="data.adress" type="text" value="" >
+	                    	<div class="optional"><span class="field-validation-valid">{{errors.adress}}</span></div>
+	                        <div class="clear">
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <label class="alpha grid_3" for="Address_Country">* Страна</label>   
+	                        <div ng-keyup="chart($event)" angucomplete id="ex1" pause="100" selectedobject="selectedPerson" localdata="people" searchfields="firstName" titlefield="firstName" minlength="1" inputclass="select grid_6 omega normal"/>
+
+	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.Country" data-valmsg-replace="true"></span></div>
+	                        <div class="clear">
+	                        </div>
+	                    </li>
+	                    <li>
+
+	                        <label class="alpha grid_3" for="Address_State">* Штат</label>
+	                        <select id="Address_State" name="Address.State" class="select grid_6 omega normal" type="select">
+	                                    <option value="">Выберите регион</option>
+	                                    <option value="AL">ALABAMA</option>
+	                        </select>
+	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.State" data-valmsg-replace="true"></span></div>
+	                        <div class="clear">
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <label class="alpha grid_3" for="Address_City">* Город</label>
+	                        <input class="group-input omega normal" name="Address.City" type="text" value="">
+	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.City" data-valmsg-replace="true"></span></div>
+	                        <div class="clear">
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <label class="alpha grid_3" for="Address_PostalCode1">* Почтовый индекс</label>
+	                        <input class="text grid_2" name="Address.PostalCode1" type="text" value="" maxlength="5">
+	                        <input class="text grid_2" name="Address.PostalCode2" type="text" value="" maxlength="4">
+	                        <div class="clear"></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                </ul>
+	            </fieldset>
+	            <fieldset>
+	                <h5>
+	                    Контактные данные
+	                </h5>
+	                <ul class="entry-group">
+	                    <li>
+	                        <div id="usaPhone1">
+	                            <label class="alpha grid_3" for="AreaCode1">* Номер телефона</label>
+	                            <input class="registration_phone-area-code"name="AreaCode1"type="text" value="">
+
+	                            <input class="registration_phone-exchange"name="ExchangeNumber1" type="text" value="">
+	                            <input class="registration_phone-subscriber"name="SubscriberNumber1" type="text" value="">
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="PhoneExt" data-valmsg-replace="true"></span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                </ul>
+	            </fieldset> 
+	        </form>
+	    </div>
+	</div>
+
+	<div class="sidebar rounded">
+		<div class="module clearfix">
+			<h5 class="header">Зарегистрируйтесь: это быстро!</h5>
+
+			<div class="registration-steps">
+				<div class="registration-step">
+					<div class="num">1</div>
+					<div class="text">
+					<h4>Шаг 1</h4>
+					<p>Заполните форму на этой странице.</p>
+					</div>
+				</div>
+
+				<!--.registration-step -->
+				<div class="registration-step">
+					<div class="num">2</div>
+					<div class="text">
+						<h4>Шаг 2</h4>
+						<p>Нажмите кнопку "Отправить", и когда мы получим заполненную форму, то отправим вам по электронной почте ваши регистрационные данные, включая идентификатор участника и пароль. Пароль обычно приходит на электронную почту в течение пяти-семи минут.</p>
+					</div>
+				</div>
+
+				<!--.step -->
+				<div class="registration-step">
+					<div class="num">3</div>
+					<div class="text">
+						<h4>Шаг 3</h4>
+						<p>Выполните вход в систему и начните искать транспортные средства.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+</div>

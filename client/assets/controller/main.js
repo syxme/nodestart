@@ -1,8 +1,7 @@
 app.controller("main", [
   "$scope", "$http", function($scope, $http) {
-  	$scope.data = {};	
-  	$scope.nowDate = new Date();	
-  	var dataDays = {};
-  	
+	$scope.$root.content = "/templates/subtpl/index.html";
+	$scope.contentTitle = "Главная страница";
+
   }
 ]);

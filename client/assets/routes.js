@@ -4,10 +4,10 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "main"
     });
-
-    $locationProvider.html5Mode({
-      enabled: true,
-      requireBase: false
+    $routeProvider.when("/registration/", {
+      templateUrl: "/templates/layer/main.html",
+      controller: "registration"
     });
+    $locationProvider.html5Mode(true);
   }
 ]);
