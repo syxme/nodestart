@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.3
+ * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-12-18T15:11Z
+ * Date: 2015-04-28T16:01Z
  */
 
 (function( global, factory ) {
@@ -67,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.3",
+	version = "2.1.4",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -531,7 +531,12 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object Error".spli
 });
 
 function isArraylike( obj ) {
-	var length = obj.length,
+
+	// Support: iOS 8.2 (not reproducible in simulator)
+	// `in` check used to prevent JIT error (gh-2145)
+	// hasOwn isn't used here due to false negatives
+	// regarding Nodelist length in IE
+	var length = "length" in obj && obj.length,
 		type = jQuery.type( obj );
 
 	if ( type === "function" || jQuery.isWindow( obj ) ) {
@@ -44644,20 +44649,28 @@ module.provider('Restangular', function() {
 
 var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete"]);
 
-app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
+app.run(["$http", "$rootScope", "$location","$q",function ($http,$rootScope,$location,$q) {
+  var utils = $q.defer();
 
-$rootScope.iheader = "/templates/index/header.html";
-$rootScope.icontent = "/templates/index/content.html";
-  $http.get('http://api.vk.com/method/database.getCountries?v=5.5&need_all=1&count=1000').success(function(req) {
-    console.log(req.response);
+  $rootScope.iheader = "/templates/index/header.html";
+  $rootScope.icontent = "/templates/index/content.html";
+  $rootScope.untils = {};
+  $rootScope.countrys = utils.promise;
+
+  $rootScope.countrys.then(function(){
+    $http.get('/api/utilits/getcountry').success(function(req) {
+      console.log('AFASFASFAS');
+      return req.response;
+    });
   });
-  $rootScope.linc = function(path) {
-    if ($location.path() == path) {
-      return "active";
-    } else {
-      return "";
-    }
-  };
+    $rootScope.linc = function(path) {
+      if ($location.path() == path) {
+        return "active";
+      } else {
+        return "";
+      }
+    };
+
 }]);
 
 app.config([
@@ -44757,7 +44770,7 @@ app.controller("main", [
   }
 ]);
 app.controller("registration", [
-"$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+"$scope", "$http", "$rootScope","$location","$window","$q", function($scope, $http, $rootScope,$location,$window,$q) {
 	$scope.$root.content = "/templates/subtpl/registration.html";
 	$scope.contentTitle = "Быстрая регистрация!!!";
 	$scope.errors = {};
@@ -44792,13 +44805,20 @@ app.controller("registration", [
 	    return re.test(email);
 	}
 	$scope.chart = function(){
-		console.log('SS',$scope.selectedPerson);
+		console.log('SS',$rootScope.countrys);
+		$q.when($rootScope.countrys).then(function(e){
+			$scope.country = e;
+		console.log('xx',e);
+	});
 	}
+
+	console.log($scope.country );
 	$scope.people = [
             {firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg"},
             {firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg"},
             {firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg"}
     ];
+    console.log($scope.people);
 	$scope.checkfield = function() {
 		var is = true;
 		if (!$scope.data.firstname||$scope.data.firstname.length<4){

@@ -1,20 +1,28 @@
 
 var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete"]);
 
-app.run(["$http", "$rootScope", "$location",function ($http,$rootScope,$location) {
+app.run(["$http", "$rootScope", "$location","$q",function ($http,$rootScope,$location,$q) {
+  var utils = $q.defer();
 
-$rootScope.iheader = "/templates/index/header.html";
-$rootScope.icontent = "/templates/index/content.html";
-  $http.get('http://api.vk.com/method/database.getCountries?v=5.5&need_all=1&count=1000').success(function(req) {
-    console.log(req.response);
+  $rootScope.iheader = "/templates/index/header.html";
+  $rootScope.icontent = "/templates/index/content.html";
+  $rootScope.untils = {};
+  $rootScope.countrys = utils.promise;
+
+  $rootScope.countrys.then(function(){
+    $http.get('/api/utilits/getcountry').success(function(req) {
+      console.log('AFASFASFAS');
+      return req.response;
+    });
   });
-  $rootScope.linc = function(path) {
-    if ($location.path() == path) {
-      return "active";
-    } else {
-      return "";
-    }
-  };
+    $rootScope.linc = function(path) {
+      if ($location.path() == path) {
+        return "active";
+      } else {
+        return "";
+      }
+    };
+
 }]);
 
 app.config([

@@ -1,5 +1,5 @@
 app.controller("registration", [
-"$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+"$scope", "$http", "$rootScope","$location","$window","$q", function($scope, $http, $rootScope,$location,$window,$q) {
 	$scope.$root.content = "/templates/subtpl/registration.html";
 	$scope.contentTitle = "Быстрая регистрация!!!";
 	$scope.errors = {};
@@ -34,13 +34,20 @@ app.controller("registration", [
 	    return re.test(email);
 	}
 	$scope.chart = function(){
-		console.log('SS',$scope.selectedPerson);
+		console.log('SS',$rootScope.countrys);
+		$q.when($rootScope.countrys).then(function(e){
+			$scope.country = e;
+		console.log('xx',e);
+	});
 	}
+
+	console.log($scope.country );
 	$scope.people = [
             {firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg"},
             {firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg"},
             {firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg"}
     ];
+    console.log($scope.people);
 	$scope.checkfield = function() {
 		var is = true;
 		if (!$scope.data.firstname||$scope.data.firstname.length<4){
