@@ -26,6 +26,43 @@ ObjectId = Schema.Types.ObjectId;
     zip: String
   });
 
+  autoSchema = new Schema({
+    user:{ 
+      type: ObjectId, 
+      ref: "User" },
+    name:String,
+    doc_type:String,
+    probeg:String,
+    doc_type:String,
+    crash:String,
+    roz_price:String,
+    remont_price:String,
+    vin:String,
+    type_kuzov:String,
+    color:String,
+    engine:String,
+    keys:String,
+    status:String,
+    photo:[]
+  });
+  auсtionsSchema = new Schema({
+    user:{ 
+      type: ObjectId, 
+      ref: "User" },
+    name:String,
+    doc_type:String,
+    probeg:String,
+    doc_type:String,
+    crash:String,
+    roz_price:String,
+    remont_price:String,
+    vin:String,
+    type_kuzov:String,
+    color:String,
+    engine:String,
+    keys:String,
+    photo:[]
+  });
   userSchema.statics.UpdateIp = function(req,login){
     this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
       if (err){
