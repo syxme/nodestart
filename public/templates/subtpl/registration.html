@@ -3,10 +3,26 @@
 	    <div class="module">
 	        <form action="" method="POST" class="ui-form" id="entry">
 	            <fieldset>
-	            <button style="height:50px"ng-click="checkfield()"></button>
 	                <h5>Расскажите нам о себе</h5>
 	                <h8 class="required-desc">* Обязательное поле</h8>
 	                <ul class="entry-group">
+	                    
+	                    <li ng-class="{error: errors.login}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Логин</label>
+	                        	<input class="group-input omega reg" ng-model="data.login" type="text" value="" maxlength="20">
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.login}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+						<li ng-class="{error: errors.password}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Пароль</label>
+	                        	<input class="group-input omega reg" ng-model="data.password" type="text" value="" maxlength="20">
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.password}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
 	                    <li ng-class="{error: errors.firstname}">
 	                        <label class="alpha grid_3">* Имя</label>
 	                        <input class="group-input omega reg" ng-model="data.firstname" type="text" value="" maxlength="20">
@@ -34,7 +50,7 @@
 	                <ul class="entry-group">
 	                    <li>
 	                        <label class="alpha grid_3" for="Company">Название компании</label>
-	                        <input class="group-input omega normal" data-val="true" id="Company" name="Company" type="text" value="" maxlength="30">
+	                        <input class="group-input omega normal" data-val="true" ng-model="data.company" type="text" value="" maxlength="30">
 	                        <div class="clear">
 	                        </div>
 	                    </li>
@@ -45,38 +61,38 @@
 	                        <div class="clear">
 	                        </div>
 	                    </li>
-	                    <li>
+	                    <li ng-class="{error: errors.country}">
 	                        <label class="alpha grid_3" for="Address_Country">* Страна</label>   
-	                        <div ng-keyup="chart($event)" angucomplete id="ex1" pause="100" selectedobject="selectedPerson" localdata="country" searchfields="title" titlefield="title" minlength="1" inputclass="select grid_6 omega normal"/>
+	                        <div angucomplete-alt id="ex1" pause="100" selected-object="selectedCountry" local-data="country" search-fields="title" title-field="title" minlength="1" input-class="select grid_6 omega normal"/>
 
-	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.Country" data-valmsg-replace="true"></span></div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.country}}</span></div>
 	                        <div class="clear">
 	                        </div>
 	                    </li>
-	                    <li>
+	                    <li ng-show="state" ng-class="{error: errors.region}">
 
-	                        <label class="alpha grid_3" for="Address_State">* Штат</label>
-	                        <select id="Address_State" name="Address.State" class="select grid_6 omega normal" type="select">
-	                                    <option value="">Выберите регион</option>
-	                                    <option value="AL">ALABAMA</option>
-	                        </select>
-	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.State" data-valmsg-replace="true"></span></div>
+	                        <label class="alpha grid_3" for="Address_State">* Область</label>
+	                        <div angucomplete-alt id="ex2" pause="100" selected-object="selectedRegion" local-data="Regions" search-fields="title" title-field="title" minlength="1" input-class="select grid_6 omega normal"/>
+
+	                        <div class="optional"><span class="field-validation-valid">{{errors.region}}</span></div>
 	                        <div class="clear">
 	                        </div>
 	                    </li>
-	                    <li>
+	                    <li ng-show="citi" ng-class="{error: errors.city}">
 	                        <label class="alpha grid_3" for="Address_City">* Город</label>
-	                        <input class="group-input omega normal" name="Address.City" type="text" value="">
-	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="Address.City" data-valmsg-replace="true"></span></div>
+	                        <div input-changed="changeCities" angucomplete-alt id="ex2" pause="100" selected-object="selectedCities" local-data="Cities" search-fields="title" title-field="title" minlength="1" input-class="select grid_6 omega normal"/>
+	                       
+	                        <div class="optional"><span class="field-validation-valid">{{errors.city}}</span></div>
 	                        <div class="clear">
 	                        </div>
 	                    </li>
-	                    <li>
+	                    <li ng-class="{error: errors.zip}">
+	                     <div class="clearfix">
 	                        <label class="alpha grid_3" for="Address_PostalCode1">* Почтовый индекс</label>
-	                        <input class="text grid_2" name="Address.PostalCode1" type="text" value="" maxlength="5">
-	                        <input class="text grid_2" name="Address.PostalCode2" type="text" value="" maxlength="4">
-	                        <div class="clear"></div>
-	                        <div class="clear"></div>
+	                        <input class="text grid_2" ng-model="data.zip" type="text" value="">
+	                     </div>   
+	                        <div class="optional"><span class="field-validation-valid">{{errors.zip}}</span></div>
+	                        <div class="clear">
 	                    </li>
 	                </ul>
 	            </fieldset>
@@ -85,19 +101,24 @@
 	                    Контактные данные
 	                </h5>
 	                <ul class="entry-group">
-	                    <li>
-	                        <div id="usaPhone1">
-	                            <label class="alpha grid_3" for="AreaCode1">* Номер телефона</label>
-	                            <input class="registration_phone-area-code"name="AreaCode1"type="text" value="">
-
-	                            <input class="registration_phone-exchange"name="ExchangeNumber1" type="text" value="">
-	                            <input class="registration_phone-subscriber"name="SubscriberNumber1" type="text" value="">
+	                    <li ng-class="{error: errors.phone}">
+	                        <div class="clearfix">
+	                            <label class="alpha grid_3" for="AreaCode1">* Номер телефона +</label>
+	                            <input class="text grid_3" ng-model="data.phone" type="text" value="">
 	                        </div>
-	                        <div class="optional"><span class="field-validation-valid" data-valmsg-for="PhoneExt" data-valmsg-replace="true"></span></div>
+	                        <div class="optional"><span class="field-validation-valid" >{{errors.phone}}</span></div>
 	                        <div class="clear"></div>
 	                    </li>
 	                </ul>
 	            </fieldset> 
+	            <fieldset>
+	                <div class="regterms">
+	                    Щелкните для отправки ваших регистрационных данных
+	                </div>
+	                <span ng-click="registr()" class="button large blue bt-reg">
+	                    Отправить
+	                </span>
+            	</fieldset>
 	        </form>
 	    </div>
 	</div>

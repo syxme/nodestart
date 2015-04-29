@@ -1,0 +1,32 @@
+<div class="account-signin">
+	<div ng-show="error" class="validation-summary-errors">
+		<span>{{error}}</span>
+	</div>
+	<div class="grid_5 alpha module left member-account ">
+	   <div id="LoginSelector" class="account-type-box rounded">
+	      <h1 class="left acc-title">Данные учетной записи</h1>
+	   </div>
+	   <div class="module-content">
+			<form class="ui-form">
+			    <div id="LoginFields" style="display: block;">
+			            <fieldset>
+			               <div class="member-account-box rounded clearfix">
+			                  <label for="UserName">Логин</label>
+			                  <input class="right" ng-model="data.login" type="text" value="">
+			                  <span class="field-validation-valid"></span>
+			               </div>
+			               <div class="member-account-box rounded clearfix">
+			                  <label for="Password">Пароль</label>
+			                  <input ng-model="data.password" type="password">
+			                  <span class="field-validation-valid"></span>
+			               </div>
+			               <span ng-click="login()" class="button large blue right">Войти в учетную запись</span>
+			            </fieldset>
+			    </div>
+			</form>
+	   </div>
+	</div>   
+    <div id="fragment_buyer" class="grid8 omega module right">
+		<a href="/registration/"><img alt="" src="/i/global/login_pic.jpg"></a>
+    </div>
+</div>

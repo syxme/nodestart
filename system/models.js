@@ -13,10 +13,17 @@ ObjectId = Schema.Types.ObjectId;
 
   userSchema = new Schema({
     login:String,
-    pass:String,
-    photo: String,
-    type:{ type: Number, default: 1 },
-    lastip:{type:String,default:"0.0.0.0"}
+    password:String,
+    adress:String,
+    city:String,
+    company:String,
+    country:String,
+    email:String,
+    firstname:String,
+    lastname:String,
+    phone:String,
+    region:String,
+    zip: String
   });
 
   userSchema.statics.UpdateIp = function(req,login){

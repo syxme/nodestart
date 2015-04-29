@@ -9,8 +9,11 @@ exports.auth = {
 				}else{
 					if (user){
 						config.user = user;
-						models.User.UpdateIp(req,user.login);
-						res.json({success:true,req:user});
+						console.log(user);
+						var user_tmp = {
+							firstname:user.firstname	
+						}
+						res.json({success:true,req:user_tmp});
 					}else{
 						res.json({success:false});
 					}

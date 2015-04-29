@@ -9,8 +9,13 @@
 	</form>	 
 	<div class="register-box-new hideWhilePrinting">
 		<p>
-			<span class="welcomeMsg">Добро пожаловать, гость! |</span>
-			<a href="/Account/LogOn">Sign In</a> or <a href="/registration/">Регистрация</a>		 
+			<span class="welcomeMsg">Добро пожаловать, {{$root.user.firstname}}! |</span>
+			<x ng-hide="$root.auth">
+				<a href="/login/">Войти</a> или <a href="/registration/">Регистрация</a>		
+			</x>
+			<x ng-show="$root.auth">
+				<a href="/cabinet/">Личный кабинет</a> или <a ng-click="$root.exit()" href="#">Выход</a> 
+			</x> 
 		</p>
 	</div>
 	

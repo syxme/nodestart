@@ -28,7 +28,7 @@ module.exports = function (grunt) {
            "node_modules/angular/angular.js",
            "node_modules/angular-route/angular-route.js",
            "node_modules/angular-animate/angular-animate.js",
-           "public/js/plugins/angucomplete.js",
+           "public/js/plugins/angucomplete-alt.js",
            "bower_components/lodash/dist/lodash.js",
            "bower_components/restangular/dist/restangular.js",
            "client/assets/**/*.js"

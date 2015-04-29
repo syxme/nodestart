@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.4
+ * jQuery JavaScript Library v2.1.3
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2015-04-28T16:01Z
+ * Date: 2014-12-18T15:11Z
  */
 
 (function( global, factory ) {
@@ -67,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.4",
+	version = "2.1.3",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -531,12 +531,7 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object Error".spli
 });
 
 function isArraylike( obj ) {
-
-	// Support: iOS 8.2 (not reproducible in simulator)
-	// `in` check used to prevent JIT error (gh-2145)
-	// hasOwn isn't used here due to false negatives
-	// regarding Nodelist length in IE
-	var length = "length" in obj && obj.length,
+	var length = obj.length,
 		type = jQuery.type( obj );
 
 	if ( type === "function" || jQuery.isWindow( obj ) ) {
@@ -36306,252 +36301,706 @@ angular.module('ngAnimate', ['ng'])
 
 })(window, window.angular);
 
-/**
- * Angucomplete
+/*
+ * angucomplete-alt
  * Autocomplete directive for AngularJS
- * By Daryl Rowland
+ * This is a fork of Daryl Rowland's angucomplete with some extra features.
+ * By Hidenari Nozaki
  */
 
-angular.module('angucomplete', [] )
-    .directive('angucomplete', function ($parse, $http, $sce, $timeout) {
+/*! Copyright (c) 2014 Hidenari Nozaki and contributors | Licensed under the MIT license */
+
+'use strict';
+
+(function (root, factory) {
+  if (typeof module !== 'undefined' && module.exports) {
+    // CommonJS
+    module.exports = factory(require('angular'));
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['angular'], factory);
+  } else {
+    // Global Variables
+    factory(root.angular);
+  }
+}(window, function (angular) {
+
+  angular.module('angucomplete-alt', [] )
+    .directive('angucompleteAlt', ['$q', '$parse', '$http', '$sce', '$timeout', '$templateCache', function ($q, $parse, $http, $sce, $timeout, $templateCache) {
+    // keyboard events
+    var KEY_DW  = 40;
+    var KEY_RT  = 39;
+    var KEY_UP  = 38;
+    var KEY_LF  = 37;
+    var KEY_ES  = 27;
+    var KEY_EN  = 13;
+    var KEY_BS  =  8;
+    var KEY_DEL = 46;
+    var KEY_TAB =  9;
+
+    var MIN_LENGTH = 3;
+    var MAX_LENGTH = 524288;  // the default max length per the html maxlength attribute
+    var PAUSE = 500;
+    var BLUR_TIMEOUT = 200;
+
+    // string constants
+    var REQUIRED_CLASS = 'autocomplete-required';
+    var TEXT_SEARCHING = 'Searching...';
+    var TEXT_NORESULTS = 'No results found';
+    var TEMPLATE_URL = '/angucomplete-alt/index.html';
+
+    // Set the default template for this directive
+    $templateCache.put(TEMPLATE_URL,
+        '<div class="angucomplete-holder" ng-class="{\'angucomplete-dropdown-visible\': showDropdown}">' +
+        '  <input id="{{id}}_value" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)"/>' +
+        '  <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">' +
+        '    <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>' +
+        '    <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>' +
+        '    <div class="angucomplete-row" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{\'angucomplete-selected-row\': $index == currentIndex}">' +
+        '      <div ng-if="imageField" class="angucomplete-image-holder">' +
+        '        <img ng-if="result.image && result.image != \'\'" ng-src="{{result.image}}" class="angucomplete-image"/>' +
+        '        <div ng-if="!result.image && result.image != \'\'" class="angucomplete-image-default"></div>' +
+        '      </div>' +
+        '      <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>' +
+        '      <div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div>' +
+        '      <div ng-if="matchClass && result.description && result.description != \'\'" class="angucomplete-description" ng-bind-html="result.description"></div>' +
+        '      <div ng-if="!matchClass && result.description && result.description != \'\'" class="angucomplete-description">{{result.description}}</div>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>'
+    );
+
     return {
-        restrict: 'EA',
-        scope: {
-            "id": "@id",
-            "placeholder": "@placeholder",
-            "selectedObject": "=selectedobject",
-            "url": "@url",
-            "dataField": "@datafield",
-            "titleField": "@titlefield",
-            "descriptionField": "@descriptionfield",
-            "imageField": "@imagefield",
-            "imageUri": "@imageuri",
-            "inputClass": "@inputclass",
-            "userPause": "@pause",
-            "localData": "=localdata",
-            "searchFields": "@searchfields",
-            "minLengthUser": "@minlength",
-            "matchClass": "@matchclass"
-        },
-        template: '<div class="angucomplete-holder"><input id="{{id}}_value" ng-model="searchStr" type="text" placeholder="{{placeholder}}" class="{{inputClass}}" onmouseup="this.select();" ng-focus="resetHideResults()" ng-blur="hideResults()" /><div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-if="showDropdown"><div class="angucomplete-searching" ng-show="searching">Searching...</div><div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)">No results found</div><div class="angucomplete-row" ng-repeat="result in results" ng-mousedown="selectResult(result)" ng-mouseover="hoverRow()" ng-class="{\'angucomplete-selected-row\': $index == currentIndex}"><div ng-if="imageField" class="angucomplete-image-holder"><img ng-if="result.image && result.image != \'\'" ng-src="{{result.image}}" class="angucomplete-image"/><div ng-if="!result.image && result.image != \'\'" class="angucomplete-image-default"></div></div><div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div><div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div><div ng-if="result.description && result.description != \'\'" class="angucomplete-description">{{result.description}}</div></div></div></div>',
+      restrict: 'EA',
+      require: '^?form',
+      scope: {
+        selectedObject: '=',
+        disableInput: '=',
+        initialValue: '@',
+        localData: '=',
+        remoteUrlRequestFormatter: '=',
+        remoteUrlRequestWithCredentials: '@',
+        remoteUrlResponseFormatter: '=',
+        remoteUrlErrorCallback: '=',
+        id: '@',
+        type: '@',
+        placeholder: '@',
+        remoteUrl: '@',
+        remoteUrlDataField: '@',
+        titleField: '@',
+        descriptionField: '@',
+        imageField: '@',
+        inputClass: '@',
+        pause: '@',
+        searchFields: '@',
+        minlength: '@',
+        matchClass: '@',
+        clearSelected: '@',
+        overrideSuggestions: '@',
+        fieldRequired: '@',
+        fieldRequiredClass: '@',
+        inputChanged: '=',
+        autoMatch: '@',
+        focusOut: '&',
+        focusIn: '&'
+      },
+      templateUrl: function(element, attrs) {
+        return attrs.templateUrl || TEMPLATE_URL;
+      },
+      link: function(scope, elem, attrs, ctrl) {
+        var inputField = elem.find('input');
+        var minlength = MIN_LENGTH;
+        var searchTimer = null;
+        var hideTimer;
+        var requiredClassName = REQUIRED_CLASS;
+        var responseFormatter;
+        var validState = null;
+        var httpCanceller = null;
+        var dd = elem[0].querySelector('.angucomplete-dropdown');
+        var isScrollOn = false;
+        var mousedownOn = null;
+        var unbindInitialValue;
 
-        link: function($scope, elem, attrs) {
-            $scope.lastSearchTerm = null;
-            $scope.currentIndex = null;
-            $scope.justChanged = false;
-            $scope.searchTimer = null;
-            $scope.hideTimer = null;
-            $scope.searching = false;
-            $scope.pause = 500;
-            $scope.minLength = 3;
-            $scope.searchStr = null;
+        elem.on('mousedown', function(event) {
+          mousedownOn = event.target.id;
+        });
 
-            if ($scope.minLengthUser && $scope.minLengthUser != "") {
-                $scope.minLength = $scope.minLengthUser;
+        scope.currentIndex = null;
+        scope.searching = false;
+        scope.searchStr = scope.initialValue;
+        unbindInitialValue = scope.$watch('initialValue', function(newval, oldval){
+          if (newval && newval.length > 0) {
+            scope.searchStr = scope.initialValue;
+            handleRequired(true);
+            unbindInitialValue();
+          }
+        });
+
+        scope.$on('angucomplete-alt:clearInput', function (event, elementId) {
+          if (!elementId) {
+            scope.searchStr = null;
+            clearResults();
+          }
+          else { // id is given
+            if (scope.id === elementId) {
+              scope.searchStr = null;
+              clearResults();
             }
+          }
+        });
 
-            if ($scope.userPause) {
-                $scope.pause = $scope.userPause;
-            }
-
-            isNewSearchNeeded = function(newTerm, oldTerm) {
-                return newTerm.length >= $scope.minLength && newTerm != oldTerm
-            }
-
-            $scope.processResults = function(responseData, str) {
-                if (responseData && responseData.length > 0) {
-                    $scope.results = [];
-
-                    var titleFields = [];
-                    if ($scope.titleField && $scope.titleField != "") {
-                        titleFields = $scope.titleField.split(",");
-                    }
-
-                    for (var i = 0; i < responseData.length; i++) {
-                        // Get title variables
-                        var titleCode = [];
-
-                        for (var t = 0; t < titleFields.length; t++) {
-                            titleCode.push(responseData[i][titleFields[t]]);
-                        }
-
-                        var description = "";
-                        if ($scope.descriptionField) {
-                            description = responseData[i][$scope.descriptionField];
-                        }
-
-                        var imageUri = "";
-                        if ($scope.imageUri) {
-                            imageUri = $scope.imageUri;
-                        }
-
-                        var image = "";
-                        if ($scope.imageField) {
-                            image = imageUri + responseData[i][$scope.imageField];
-                        }
-
-                        var text = titleCode.join(' ');
-                        if ($scope.matchClass) {
-                            var re = new RegExp(str, 'i');
-                            var strPart = text.match(re)[0];
-                            text = $sce.trustAsHtml(text.replace(re, '<span class="'+ $scope.matchClass +'">'+ strPart +'</span>'));
-                        }
-
-                        var resultRow = {
-                            title: text,
-                            description: description,
-                            image: image,
-                            originalObject: responseData[i]
-                        }
-
-                        $scope.results[$scope.results.length] = resultRow;
-                    }
-
-
-                } else {
-                    $scope.results = [];
-                }
-            }
-
-            $scope.searchTimerComplete = function(str) {
-                // Begin the search
-
-                if (str.length >= $scope.minLength) {
-                    if ($scope.localData) {
-                        var searchFields = $scope.searchFields.split(",");
-
-                        var matches = [];
-
-                        for (var i = 0; i < $scope.localData.length; i++) {
-                            var match = false;
-
-                            for (var s = 0; s < searchFields.length; s++) {
-                                match = match || (typeof $scope.localData[i][searchFields[s]] === 'string' && typeof str === 'string' && $scope.localData[i][searchFields[s]].toLowerCase().indexOf(str.toLowerCase()) >= 0);
-                            }
-
-                            if (match) {
-                                matches[matches.length] = $scope.localData[i];
-                            }
-                        }
-
-                        $scope.searching = false;
-                        $scope.processResults(matches, str);
-
-                    } else {
-                        $http.get($scope.url + str, {}).
-                            success(function(responseData, status, headers, config) {
-                                $scope.searching = false;
-                                $scope.processResults((($scope.dataField) ? responseData[$scope.dataField] : responseData ), str);
-                            }).
-                            error(function(data, status, headers, config) {
-                                console.log("error");
-                            });
-                    }
-                }
-            }
-
-            $scope.hideResults = function() {
-                $scope.hideTimer = $timeout(function() {
-                    $scope.showDropdown = false;
-                }, $scope.pause);
-            };
-
-            $scope.resetHideResults = function() {
-                if($scope.hideTimer) {
-                    $timeout.cancel($scope.hideTimer);
-                };
-            };
-
-            $scope.hoverRow = function(index) {
-                $scope.currentIndex = index;
-            }
-
-            $scope.keyPressed = function(event) {
-                if (!(event.which == 38 || event.which == 40 || event.which == 13)) {
-                    if (!$scope.searchStr || $scope.searchStr == "") {
-                        $scope.showDropdown = false;
-                        $scope.lastSearchTerm = null
-                    } else if (isNewSearchNeeded($scope.searchStr, $scope.lastSearchTerm)) {
-                        $scope.lastSearchTerm = $scope.searchStr
-                        $scope.showDropdown = true;
-                        $scope.currentIndex = -1;
-                        $scope.results = [];
-
-                        if ($scope.searchTimer) {
-                            $timeout.cancel($scope.searchTimer);
-                        }
-
-                        $scope.searching = true;
-
-                        $scope.searchTimer = $timeout(function() {
-                            $scope.searchTimerComplete($scope.searchStr);
-                        }, $scope.pause);
-                    }
-                } else {
-                    event.preventDefault();
-                }
-            }
-
-            $scope.selectResult = function(result) {
-                if ($scope.matchClass) {
-                    result.title = result.title.toString().replace(/(<([^>]+)>)/ig, '');
-                }
-                $scope.searchStr = $scope.lastSearchTerm = result.title;
-                $scope.selectedObject = result;
-                $scope.showDropdown = false;
-                $scope.results = [];
-                //$scope.$apply();
-            }
-
-            var inputField = elem.find('input');
-
-            inputField.on('keyup', $scope.keyPressed);
-
-            elem.on("keyup", function (event) {
-                if(event.which === 40) {
-                    if ($scope.results && ($scope.currentIndex + 1) < $scope.results.length) {
-                        $scope.currentIndex ++;
-                        $scope.$apply();
-                        event.preventDefault;
-                        event.stopPropagation();
-                    }
-
-                    $scope.$apply();
-                } else if(event.which == 38) {
-                    if ($scope.currentIndex >= 1) {
-                        $scope.currentIndex --;
-                        $scope.$apply();
-                        event.preventDefault;
-                        event.stopPropagation();
-                    }
-
-                } else if (event.which == 13) {
-                    if ($scope.results && $scope.currentIndex >= 0 && $scope.currentIndex < $scope.results.length) {
-                        $scope.selectResult($scope.results[$scope.currentIndex]);
-                        $scope.$apply();
-                        event.preventDefault;
-                        event.stopPropagation();
-                    } else {
-                        $scope.results = [];
-                        $scope.$apply();
-                        event.preventDefault;
-                        event.stopPropagation();
-                    }
-
-                } else if (event.which == 27) {
-                    $scope.results = [];
-                    $scope.showDropdown = false;
-                    $scope.$apply();
-                } else if (event.which == 8) {
-                    $scope.selectedObject = null;
-                    $scope.$apply();
-                }
-            });
-
+        // for IE8 quirkiness about event.which
+        function ie8EventNormalizer(event) {
+          return event.which ? event.which : event.keyCode;
         }
-    };
-});
 
+        function callOrAssign(value) {
+          if (typeof scope.selectedObject === 'function') {
+            scope.selectedObject(value);
+          }
+          else {
+            scope.selectedObject = value;
+          }
+
+          if (value) {
+            handleRequired(true);
+          }
+          else {
+            handleRequired(false);
+          }
+        }
+
+        function callFunctionOrIdentity(fn) {
+          return function(data) {
+            return scope[fn] ? scope[fn](data) : data;
+          };
+        }
+
+        function setInputString(str) {
+          callOrAssign({originalObject: str});
+
+          if (scope.clearSelected) {
+            scope.searchStr = null;
+          }
+          clearResults();
+        }
+
+        function extractTitle(data) {
+          // split title fields and run extractValue for each and join with ' '
+          return scope.titleField.split(',')
+            .map(function(field) {
+              return extractValue(data, field);
+            })
+            .join(' ');
+        }
+
+        function extractValue(obj, key) {
+          var keys, result;
+          if (key) {
+            keys= key.split('.');
+            result = obj;
+            keys.forEach(function(k) { result = result[k]; });
+          }
+          else {
+            result = obj;
+          }
+          return result;
+        }
+
+        function findMatchString(target, str) {
+          var result, matches, re;
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+          // Escape user input to be treated as a literal string within a regular expression
+          re = new RegExp(str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+          if (!target) { return; }
+          matches = target.match(re);
+          if (matches) {
+            result = target.replace(re,
+                '<span class="'+ scope.matchClass +'">'+ matches[0] +'</span>');
+          }
+          else {
+            result = target;
+          }
+          return $sce.trustAsHtml(result);
+        }
+
+        function handleRequired(valid) {
+          validState = scope.searchStr;
+          if (scope.fieldRequired && ctrl) {
+            ctrl.$setValidity(requiredClassName, valid);
+          }
+        }
+
+        function keyupHandler(event) {
+          var which = ie8EventNormalizer(event);
+          if (which === KEY_LF || which === KEY_RT) {
+            // do nothing
+            return;
+          }
+
+          if (which === KEY_UP || which === KEY_EN) {
+            event.preventDefault();
+          }
+          else if (which === KEY_DW) {
+            event.preventDefault();
+            if (!scope.showDropdown && scope.searchStr && scope.searchStr.length >= minlength) {
+              initResults();
+              scope.searching = true;
+              searchTimerComplete(scope.searchStr);
+            }
+          }
+          else if (which === KEY_ES) {
+            clearResults();
+            scope.$apply(function() {
+              inputField.val(scope.searchStr);
+            });
+          }
+          else {
+            if (!scope.searchStr || scope.searchStr === '') {
+              scope.showDropdown = false;
+            } else if (scope.searchStr.length >= minlength) {
+              initResults();
+
+              if (searchTimer) {
+                $timeout.cancel(searchTimer);
+              }
+
+              scope.searching = true;
+
+              searchTimer = $timeout(function() {
+                searchTimerComplete(scope.searchStr);
+              }, scope.pause);
+            }
+
+            if (validState && validState !== scope.searchStr && !scope.clearSelected) {
+              callOrAssign(undefined);
+            }
+          }
+        }
+
+        function handleOverrideSuggestions(event) {
+          if (scope.overrideSuggestions &&
+              !(scope.selectedObject && scope.selectedObject.originalObject === scope.searchStr)) {
+            if (event) {
+              event.preventDefault();
+            }
+            setInputString(scope.searchStr);
+          }
+        }
+
+        function dropdownRowOffsetHeight(row) {
+          var css = getComputedStyle(row);
+          return row.offsetHeight +
+            parseInt(css.marginTop, 10) + parseInt(css.marginBottom, 10);
+        }
+
+        function dropdownHeight() {
+          return dd.getBoundingClientRect().top +
+            parseInt(getComputedStyle(dd).maxHeight, 10);
+        }
+
+        function dropdownRow() {
+          return elem[0].querySelectorAll('.angucomplete-row')[scope.currentIndex];
+        }
+
+        function dropdownRowTop() {
+          return dropdownRow().getBoundingClientRect().top -
+            (dd.getBoundingClientRect().top +
+             parseInt(getComputedStyle(dd).paddingTop, 10));
+        }
+
+        function dropdownScrollTopTo(offset) {
+          dd.scrollTop = dd.scrollTop + offset;
+        }
+
+        function updateInputField(){
+          var current = scope.results[scope.currentIndex];
+          if (scope.matchClass) {
+            inputField.val(extractTitle(current.originalObject));
+          }
+          else {
+            inputField.val(current.title);
+          }
+        }
+
+        function keydownHandler(event) {
+          var which = ie8EventNormalizer(event);
+          var row = null;
+          var rowTop = null;
+
+          if (which === KEY_EN && scope.results) {
+            if (scope.currentIndex >= 0 && scope.currentIndex < scope.results.length) {
+              event.preventDefault();
+              scope.selectResult(scope.results[scope.currentIndex]);
+            } else {
+              handleOverrideSuggestions(event);
+              clearResults();
+            }
+            scope.$apply();
+          } else if (which === KEY_DW && scope.results) {
+            event.preventDefault();
+            if ((scope.currentIndex + 1) < scope.results.length && scope.showDropdown) {
+              scope.$apply(function() {
+                scope.currentIndex ++;
+                updateInputField();
+              });
+
+              if (isScrollOn) {
+                row = dropdownRow();
+                if (dropdownHeight() < row.getBoundingClientRect().bottom) {
+                  dropdownScrollTopTo(dropdownRowOffsetHeight(row));
+                }
+              }
+            }
+          } else if (which === KEY_UP && scope.results) {
+            event.preventDefault();
+            if (scope.currentIndex >= 1) {
+              scope.$apply(function() {
+                scope.currentIndex --;
+                updateInputField();
+              });
+
+              if (isScrollOn) {
+                rowTop = dropdownRowTop();
+                if (rowTop < 0) {
+                  dropdownScrollTopTo(rowTop - 1);
+                }
+              }
+            }
+            else if (scope.currentIndex === 0) {
+              scope.$apply(function() {
+                scope.currentIndex = -1;
+                inputField.val(scope.searchStr);
+              });
+            }
+          } else if (which === KEY_TAB) {
+            if (scope.results && scope.results.length > 0 && scope.showDropdown) {
+              if (scope.currentIndex === -1 && scope.overrideSuggestions) {
+                // intentionally not sending event so that it does not
+                // prevent default tab behavior
+                handleOverrideSuggestions();
+              }
+              else {
+                if (scope.currentIndex === -1) {
+                  scope.currentIndex = 0;
+                }
+                scope.selectResult(scope.results[scope.currentIndex]);
+                scope.$digest();
+              }
+            }
+            else {
+              // no results
+              // intentionally not sending event so that it does not
+              // prevent default tab behavior
+              if (scope.searchStr && scope.searchStr.length > 0) {
+                handleOverrideSuggestions();
+              }
+            }
+          }
+        }
+
+        function httpSuccessCallbackGen(str) {
+          return function(responseData, status, headers, config) {
+            scope.searching = false;
+            processResults(
+              extractValue(responseFormatter(responseData), scope.remoteUrlDataField),
+              str);
+          };
+        }
+
+        function httpErrorCallback(errorRes, status, headers, config) {
+          if (status !== 0) {
+            if (scope.remoteUrlErrorCallback) {
+              scope.remoteUrlErrorCallback(errorRes, status, headers, config);
+            }
+            else {
+              if (console && console.error) {
+                console.error('http error');
+              }
+            }
+          }
+        }
+
+        function cancelHttpRequest() {
+          if (httpCanceller) {
+            httpCanceller.resolve();
+          }
+        }
+
+        function getRemoteResults(str) {
+          var params = {},
+              url = scope.remoteUrl + encodeURIComponent(str);
+          if (scope.remoteUrlRequestFormatter) {
+            params = {params: scope.remoteUrlRequestFormatter(str)};
+            url = scope.remoteUrl;
+          }
+          if (!!scope.remoteUrlRequestWithCredentials) {
+            params.withCredentials = true;
+          }
+          cancelHttpRequest();
+          httpCanceller = $q.defer();
+          params.timeout = httpCanceller.promise;
+          $http.get(url, params)
+            .success(httpSuccessCallbackGen(str))
+            .error(httpErrorCallback);
+        }
+
+        function clearResults() {
+          scope.showDropdown = false;
+          scope.results = [];
+          if (dd) {
+            dd.scrollTop = 0;
+          }
+        }
+
+        function initResults() {
+          scope.showDropdown = true;
+          scope.currentIndex = -1;
+          scope.results = [];
+        }
+
+        function getLocalResults(str) {
+          var i, match, s, value,
+              searchFields = scope.searchFields.split(','),
+              matches = [];
+
+          for (i = 0; i < scope.localData.length; i++) {
+            match = false;
+
+            for (s = 0; s < searchFields.length; s++) {
+              value = extractValue(scope.localData[i], searchFields[s]) || '';
+              match = match || (value.toLowerCase().indexOf(str.toLowerCase()) >= 0);
+            }
+
+            if (match) {
+              matches[matches.length] = scope.localData[i];
+            }
+          }
+
+          scope.searching = false;
+          processResults(matches, str);
+        }
+
+        function checkExactMatch(result, obj, str){
+          for(var key in obj){
+            if(obj[key].toLowerCase() === str.toLowerCase()){
+              scope.selectResult(result);
+              return;
+            }
+          }
+        }
+
+        function searchTimerComplete(str) {
+          // Begin the search
+          if (!str || str.length < minlength) {
+            return;
+          }
+          if (scope.localData) {
+            scope.$apply(function() {
+              getLocalResults(str);
+            });
+          }
+          else {
+            getRemoteResults(str);
+          }
+        }
+
+        function processResults(responseData, str) {
+          var i, description, image, text, formattedText, formattedDesc;
+
+          if (responseData && responseData.length > 0) {
+            scope.results = [];
+
+            for (i = 0; i < responseData.length; i++) {
+              if (scope.titleField && scope.titleField !== '') {
+                text = formattedText = extractTitle(responseData[i]);
+              }
+
+              description = '';
+              if (scope.descriptionField) {
+                description = formattedDesc = extractValue(responseData[i], scope.descriptionField);
+              }
+
+              image = '';
+              if (scope.imageField) {
+                image = extractValue(responseData[i], scope.imageField);
+              }
+
+              if (scope.matchClass) {
+                formattedText = findMatchString(text, str);
+                formattedDesc = findMatchString(description, str);
+              }
+
+              scope.results[scope.results.length] = {
+                title: formattedText,
+                description: formattedDesc,
+                image: image,
+                originalObject: responseData[i]
+              };
+
+              if (scope.autoMatch) {
+                checkExactMatch(scope.results[scope.results.length-1],
+                    {title: text, desc: description || ''}, scope.searchStr);
+              }
+            }
+
+          } else {
+            scope.results = [];
+          }
+        }
+
+        function showAll() {
+          if (scope.localData) {
+            processResults(scope.localData, '');
+          }
+          else {
+            getRemoteResults('');
+          }
+        }
+
+        scope.onFocusHandler = function() {
+          if (scope.focusIn) {
+            scope.focusIn();
+          }
+          if (minlength === 0 && (!scope.searchStr || scope.searchStr.length === 0)) {
+            scope.showDropdown = true;
+            showAll();
+          }
+        };
+
+        scope.hideResults = function(event) {
+          if (mousedownOn === scope.id + '_dropdown') {
+            mousedownOn = null;
+          }
+          else {
+            hideTimer = $timeout(function() {
+              clearResults();
+              scope.$apply(function() {
+                if (scope.searchStr && scope.searchStr.length > 0) {
+                  inputField.val(scope.searchStr);
+                }
+              });
+            }, BLUR_TIMEOUT);
+            cancelHttpRequest();
+
+            if (scope.focusOut) {
+              scope.focusOut();
+            }
+
+            if (scope.overrideSuggestions) {
+              if (scope.searchStr && scope.searchStr.length > 0 && scope.currentIndex === -1) {
+                handleOverrideSuggestions();
+              }
+            }
+          }
+        };
+
+        scope.resetHideResults = function() {
+          if (hideTimer) {
+            $timeout.cancel(hideTimer);
+          }
+        };
+
+        scope.hoverRow = function(index) {
+          scope.currentIndex = index;
+        };
+
+        scope.selectResult = function(result) {
+          // Restore original values
+          if (scope.matchClass) {
+            result.title = extractTitle(result.originalObject);
+            result.description = extractValue(result.originalObject, scope.descriptionField);
+          }
+
+          if (scope.clearSelected) {
+            scope.searchStr = null;
+          }
+          else {
+            scope.searchStr = result.title;
+          }
+          callOrAssign(result);
+          clearResults();
+        };
+
+        scope.inputChangeHandler = function(str) {
+          if (str.length < minlength) {
+            clearResults();
+          }
+          else if (str.length === 0 && minlength === 0) {
+            showAll();
+          }
+
+          if (scope.inputChanged) {
+            str = scope.inputChanged(str);
+          }
+          return str;
+        };
+
+        // check required
+        if (scope.fieldRequiredClass && scope.fieldRequiredClass !== '') {
+          requiredClassName = scope.fieldRequiredClass;
+        }
+
+        // check min length
+        if (scope.minlength && scope.minlength !== '') {
+          minlength = parseInt(scope.minlength, 10);
+        }
+
+        // check pause time
+        if (!scope.pause) {
+          scope.pause = PAUSE;
+        }
+
+        // check clearSelected
+        if (!scope.clearSelected) {
+          scope.clearSelected = false;
+        }
+
+        // check override suggestions
+        if (!scope.overrideSuggestions) {
+          scope.overrideSuggestions = false;
+        }
+
+        // check required field
+        if (scope.fieldRequired && ctrl) {
+          // check initial value, if given, set validitity to true
+          if (scope.initialValue) {
+            handleRequired(true);
+          }
+          else {
+            handleRequired(false);
+          }
+        }
+
+        // set strings for "Searching..." and "No results"
+        scope.textSearching = attrs.textSearching ? attrs.textSearching : TEXT_SEARCHING;
+        scope.textNoResults = attrs.textNoResults ? attrs.textNoResults : TEXT_NORESULTS;
+        
+        // set max length (default to maxlength deault from html
+        scope.maxlength = attrs.maxlength ? attrs.maxlength : MAX_LENGTH;
+
+        // register events
+        inputField.on('keydown', keydownHandler);
+        inputField.on('keyup', keyupHandler);
+
+        // set response formatter
+        responseFormatter = callFunctionOrIdentity('remoteUrlResponseFormatter');
+
+        scope.$on('$destroy', function() {
+          // take care of required validity when it gets destroyed
+          handleRequired(true);
+        });
+
+        // set isScrollOn
+        $timeout(function() {
+          var css = getComputedStyle(dd);
+          isScrollOn = css.maxHeight && css.overflowY === 'auto';
+        });
+      }
+    };
+  }]);
+
+}));
 
 /**
  * @license
@@ -44647,29 +45096,47 @@ module.provider('Restangular', function() {
 })();
 
 
-var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete"]);
+var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete-alt"]);
 
-app.run(["$http", "$rootScope", "$location","$q",function ($http,$rootScope,$location,$q) {
-  var utils = $q.defer();
+app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$rootScope,$location,$q,$window) {
+  var defer = $q.defer();
+  $rootScope.user = {};
+  $http.post("/api/users/auth").success(function(req) {
+    if (req.success){
+      $rootScope.user = req.req;
+      $rootScope.auth = true;
 
+    }else{
+      $rootScope.auth = false;
+      $rootScope.user.firstname = "Гость" 
+    }
+  });
   $rootScope.iheader = "/templates/index/header.html";
   $rootScope.icontent = "/templates/index/content.html";
-  $rootScope.untils = {};
-  $rootScope.countrys = utils.promise;
-
-  $rootScope.countrys.then(function(){
-    $http.get('/api/utilits/getcountry').success(function(req) {
-      console.log('AFASFASFAS');
-      return req.response;
+  $rootScope.countrys = function(){
+    $http.post('/api/utilits/getcountry').success(function(req) {
+      defer.resolve(req.response.items);
     });
-  });
-    $rootScope.linc = function(path) {
-      if ($location.path() == path) {
-        return "active";
-      } else {
-        return "";
+    return defer.promise;
+  };
+  $rootScope.exit = function() {
+    $http.get("/api/users/exit").success(function(req) {
+      if (req.success){ 
+        $rootScope.auth = false;  
+        $window.location.reload();
+
+      }else{
+        $scope.info = "Error";
       }
-    };
+    });
+  } 
+  $rootScope.linc = function(path) {
+    if ($location.path() == path) {
+      return "active";
+    } else {
+      return "";
+    }
+  };
 
 }]);
 
@@ -44697,31 +45164,42 @@ function($scope, $http, $rootScope,$location,Restangular) {
 	$scope.users = Restangular.all("users").getList().$object;
 }
 ]);
+app.controller("cabinet", [
+"$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+	$scope.$root.content = "/templates/subtpl/cabinet.html";
+	$scope.contentTitle = "Личный Кабинет";
+	$scope.data = {};
+
+	$scope.auth = $rootScope.auth;
+  	if (!$scope.auth){
+  		$location.path("/login/");
+  	}
+}]);
 app.controller("login", [
 "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+	$scope.$root.content = "/templates/subtpl/login.html";
+	$scope.contentTitle = "Вход в учетную запись";
+	$scope.errors = {};
+	$scope.data = {};
+
 	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
   		$location.path("/");
   	}
 	$scope.login = function() {
-		var data	= {};
-		$scope.info = "";
-		data.login	= $scope.ilogin;
-		data.pass	= $scope.ipass;
-		
-		if (data.login && data.pass != null){
-			$http.post("/api/users/login",data).success(function(req) {
+		if ($scope.data.login && $scope.data.password != null){
+			$http.post("/api/users/login",$scope.data).success(function(req) {
 				if (req.success){	
 					$rootScope.User = req.req;
 					$rootScope.auth = $scope.auth = true;	
-					$location.path("/");
+					$location.path("/cabinet/");
 				}else{
-					$scope.info = "Error: Чувак не найден!";
+					$scope.error = "Пользователь не найден либо неверный пароль!!!";
 				}
 			});
 			
 		}else{
-			$scope.info = "Error";
+			$scope.error = "Введите логин и пароль!!!!";
 		}
 	}
 	$scope.exit = function() {
@@ -44734,32 +45212,7 @@ app.controller("login", [
 				$scope.info = "Error";
 			}
 		});
-	}
-	$scope.Register = function() {
-		var data	= {};
-		$scope.info = "";
-		data.login	= $scope.ilogin;
-		data.pass	= $scope.ipass;
-		
-		if (data.login && data.pass != null){
-			if (data.login.length >= 3){
-				$http.post("/api/users/register",data).success(function(req) {
-					if (req.success){
-						$rootScope.User = req.req;
-						$rootScope.auth = $scope.auth = true;	
-					}else{
-						$scope.info = "Error: Чувак, такой пользователь есть уже!";
-					}
-				});
-			}else{
-				$scope.info = "Error: Чувак, замути больше букв!";
-			}
-		}else{
-			$scope.info = "Error";
-		}
-	}
-	
-	
+	}	
  }
 ]);
 app.controller("main", [
@@ -44771,56 +45224,81 @@ app.controller("main", [
 ]);
 app.controller("registration", [
 "$scope", "$http", "$rootScope","$location","$window","$q", function($scope, $http, $rootScope,$location,$window,$q) {
+  	if ($rootScope.auth){
+  		$location.path("/");
+  	}
 	$scope.$root.content = "/templates/subtpl/registration.html";
 	$scope.contentTitle = "Быстрая регистрация!!!";
 	$scope.errors = {};
 	$scope.data = {};
 
-
-	$scope.Register = function() {
-		var data	= {};
-		$scope.info = "";
-		data.login	= $scope.ilogin;
-		data.pass	= $scope.ipass;
-		
-		if (data.login && data.pass != null){
-			if (data.login.length >= 3){
-				$http.post("/api/users/register",data).success(function(req) {
-					if (req.success){
-						$rootScope.User = req.req;
-						$rootScope.auth = $scope.auth = true;	
-					}else{
-						$scope.info = "Error: Чувак, такой пользователь есть уже!";
-					}
-				});
-			}else{
-				$scope.info = "Error: Чувак, замути больше букв!";
-			}
-		}else{
-			$scope.info = "Error";
+	var country_id = 0;
+	var region_id = 0;
+	$scope.state = false;
+	$scope.citi = false;
+	$scope.registr = function() {
+		if ($scope.checkfield()){
+			var data = angular.copy($scope.data);
+			$http.post("/api/users/register",data).success(function(req) {
+				if (req.success){
+					$rootScope.User = req.req;
+					$rootScope.auth = $scope.auth = true;	
+					$location.path("/");
+				}else{
+					$scope.errors.login = "Такой логин уже существует";
+				}
+			});
 		}
+			
 	}
 	function validateEmail(email) {
-	    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-	    return re.test(email);
+		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		return re.test(email);
 	}
-	$scope.chart = function(){
-		console.log('SS',$rootScope.countrys);
-		$q.when($rootScope.countrys).then(function(e){
-			$scope.country = e;
-		console.log('xx',e);
-	});
+	$rootScope.countrys().then(function(e){
+		$scope.country = e;
+	});	
+	$scope.selectedCountry = function(e){
+		country_id = e.originalObject.id;
+		$scope.data.country = e.originalObject.title;
+		$http.post('/api/utilits/getregions',{q:'',country_id:country_id}).success(function(req) {
+			$scope.Regions = req.response.items;
+			$scope.state = true;
+		});
+	}
+	$scope.selectedRegion = function (e){
+		$scope.data.region = e.originalObject.title;
+		region_id = e.originalObject.id;
+		$http.post('/api/utilits/getcities',{country_id:country_id,region_id:region_id}).success(function(req) {
+			$scope.Cities = req.response.items;
+		});
+		$scope.citi = true;
+	}
+	$scope.changeCities = function(str){
+		$http.post('/api/utilits/getcities',{query:str,country_id:country_id,region_id:region_id}).success(function(req) {
+			$scope.Cities = req.response.items;
+		});	
+	}
+	$scope.selectedCities = function (e){
+		$scope.data.city = e.originalObject.title;
 	}
 
-	console.log($scope.country );
-	$scope.people = [
-            {firstName: "Daryl", surname: "Rowland", twitter: "@darylrowland", pic: "img/daryl.jpeg"},
-            {firstName: "Alan", surname: "Partridge", twitter: "@alangpartridge", pic: "img/alanp.jpg"},
-            {firstName: "Annie", surname: "Rowland", twitter: "@anklesannie", pic: "img/annie.jpg"}
-    ];
-    console.log($scope.people);
 	$scope.checkfield = function() {
 		var is = true;
+		if (!$scope.data.login||$scope.data.login.length<3){
+			$scope.errors.login = "Неверный логин или слишком короткий";
+			is = false;
+		}else{
+			$scope.errors.login = "";
+		}
+
+		if (!$scope.data.password||$scope.data.password.length<6){
+			$scope.errors.password = "Пароль слишком короткий, минимум 6 знаков";
+			is = false;
+		}else{
+			$scope.errors.password = "";
+		}
+
 		if (!$scope.data.firstname||$scope.data.firstname.length<4){
 			$scope.errors.firstname = "Введите имя пользователя";
 			is = false;
@@ -44835,15 +45313,57 @@ app.controller("registration", [
 			$scope.errors.lastname = "";
 		}
 
+		if (!$scope.data.adress||$scope.data.adress.length<3){
+			$scope.errors.adress = "Введите правельный адрес";
+			is = false;
+		}else{
+			$scope.errors.adress = "";
+		}
+
+		if (!$scope.data.zip||$scope.data.zip.length<5){
+			$scope.errors.zip = "Введите правельный zip";
+			is = false;
+		}else{
+			$scope.errors.zip = "";
+		}
+		if (!$scope.data.phone||$scope.data.phone.length<11){
+			$scope.errors.phone = "Ошибка, например:79281234567";
+			is = false;
+		}else{
+			$scope.errors.phone = "";
+		}
 		if (!validateEmail($scope.data.email)){
 			$scope.errors.email = "Введите email пользователя";
 			is = false;
 		}else{
 			$scope.errors.email = "";
 		}
-		return(false);
-	}
-	
+
+
+		if (!$scope.data.country){
+			$scope.errors.country = "Выберите страну из списка";
+			is = false;
+		}else{
+			$scope.errors.country = "";
+			if (!$scope.data.region){
+				$scope.errors.region = "Выберите регион из списка";
+				is = false;
+			}else{
+				$scope.errors.region = "";
+				if (!$scope.data.city){
+					$scope.errors.city = "Выберите город из списка";
+					is = false;
+				}else{
+					$scope.errors.city = "";
+				}
+			}
+		}
+		if (is){
+			return true
+		}else{
+			return false;
+		}
+	}	
 	
  }
 ]);
@@ -44853,9 +45373,18 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "main"
     });
+
     $routeProvider.when("/registration/", {
       templateUrl: "/templates/layer/main.html",
       controller: "registration"
+    });
+    $routeProvider.when("/login/", {
+      templateUrl: "/templates/layer/main.html",
+      controller: "login"
+    });
+    $routeProvider.when("/cabinet/", {
+      templateUrl: "/templates/layer/main.html",
+      controller: "cabinet"
     });
     $locationProvider.html5Mode(true);
   }

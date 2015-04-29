@@ -29,7 +29,6 @@ initApi = function(app) {
 	app.get('/', function(req, res){res.render("index");});
 	app.get('/:option/', function(req, res,next){ 
 		if (req.params.option!="api"){
-			console.log(req.route.stack);
 			res.render("index");
 		}else{
 			next();

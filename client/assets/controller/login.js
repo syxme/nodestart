@@ -1,28 +1,28 @@
 app.controller("login", [
 "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+	$scope.$root.content = "/templates/subtpl/login.html";
+	$scope.contentTitle = "Вход в учетную запись";
+	$scope.errors = {};
+	$scope.data = {};
+
 	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
   		$location.path("/");
   	}
 	$scope.login = function() {
-		var data	= {};
-		$scope.info = "";
-		data.login	= $scope.ilogin;
-		data.pass	= $scope.ipass;
-		
-		if (data.login && data.pass != null){
-			$http.post("/api/users/login",data).success(function(req) {
+		if ($scope.data.login && $scope.data.password != null){
+			$http.post("/api/users/login",$scope.data).success(function(req) {
 				if (req.success){	
 					$rootScope.User = req.req;
 					$rootScope.auth = $scope.auth = true;	
-					$location.path("/");
+					$location.path("/cabinet/");
 				}else{
-					$scope.info = "Error: Чувак не найден!";
+					$scope.error = "Пользователь не найден либо неверный пароль!!!";
 				}
 			});
 			
 		}else{
-			$scope.info = "Error";
+			$scope.error = "Введите логин и пароль!!!!";
 		}
 	}
 	$scope.exit = function() {
@@ -35,31 +35,6 @@ app.controller("login", [
 				$scope.info = "Error";
 			}
 		});
-	}
-	$scope.Register = function() {
-		var data	= {};
-		$scope.info = "";
-		data.login	= $scope.ilogin;
-		data.pass	= $scope.ipass;
-		
-		if (data.login && data.pass != null){
-			if (data.login.length >= 3){
-				$http.post("/api/users/register",data).success(function(req) {
-					if (req.success){
-						$rootScope.User = req.req;
-						$rootScope.auth = $scope.auth = true;	
-					}else{
-						$scope.info = "Error: Чувак, такой пользователь есть уже!";
-					}
-				});
-			}else{
-				$scope.info = "Error: Чувак, замути больше букв!";
-			}
-		}else{
-			$scope.info = "Error";
-		}
-	}
-	
-	
+	}	
  }
 ]);
