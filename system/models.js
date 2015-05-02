@@ -31,6 +31,8 @@ ObjectId = Schema.Types.ObjectId;
       type: ObjectId, 
       ref: "User" },
     name:String,
+    marka:String,
+    model:String,
     doc_type:String,
     probeg:String,
     doc_type:String,
@@ -46,22 +48,10 @@ ObjectId = Schema.Types.ObjectId;
     photo:[]
   });
   auсtionsSchema = new Schema({
-    user:{ 
+    auto:{ 
       type: ObjectId, 
-      ref: "User" },
-    name:String,
-    doc_type:String,
-    probeg:String,
-    doc_type:String,
-    crash:String,
-    roz_price:String,
-    remont_price:String,
-    vin:String,
-    type_kuzov:String,
-    color:String,
-    engine:String,
-    keys:String,
-    photo:[]
+      ref: "Auto" },
+    type:String,
   });
   userSchema.statics.UpdateIp = function(req,login){
     this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
