@@ -45169,9 +45169,28 @@ function($scope, $http, $rootScope,$location,Restangular) {
 	$scope.users = Restangular.all("users").getList().$object;
 }
 ]);
+app.controller("addcar", [
+"$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
+	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
+	$scope.$root.cabinet = "/templates/subtpl/cabinet/addcar.html";
+	$scope.contentTitle = "Добавить автомобиль";
+	$scope.data = {};
+	$scope.markaAvto = markaAvto;
+	$scope.upmark = function(){
+		$scope.model = markaAvto[$scope.data.marka];
+	}
+	$scope.upmodlel = function(){
+		$scope.model = markaAvto[$scope.data.marka];
+	}
+	
+	$scope.auth = $rootScope.auth;
+  	if (!$scope.auth){
+  		$location.path("/login/");
+  	}
+}]);
 app.controller("cabinet", [
 "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
-	$scope.$root.content = "/templates/subtpl/cabinet.html";
+	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
 	$scope.contentTitle = "Личный Кабинет";
 	$scope.data = {};
 
@@ -45227,6 +45246,16 @@ app.controller("main", [
 
   }
 ]);
+app.controller("menu", [
+"$scope","$location", function($scope,$location) {
+	$scope.linc = function(path) {
+    if ($location.path() == path) {
+      return "active";
+    } else {
+      return "";
+    }
+	}
+}]);
 app.controller("registration", [
 "$scope", "$http", "$rootScope","$location","$window","$q", function($scope, $http, $rootScope,$location,$window,$q) {
   	if ($rootScope.auth){
@@ -45372,6 +45401,157 @@ app.controller("registration", [
 	
  }
 ]);
+/*function xe (e){
+	var $x = $('#'+e+' option');
+	var n = $x.length;
+	var objq = {};
+	for(var i=1;i<n;i++){
+		objq[$x.eq(i).text()]=i;
+	}
+	return JSON.stringify(objq);
+}*/
+
+var markaAvto = {
+"AC":{"Ace":1,"Aceca":2,"Cobra":3,"Другая":4},
+"Acura":{"CL":1,"CSX":2,"EL":3,"Integra":4,"MDX":5,"NSX":6,"RDX":7,"RL":8,"RSX":9,"SLX":10,"TL":11,"TLX":12,"TSX":13,"ZDX":14,"Другая":15},
+"Alfa Romeo":{"33":9,"75":11,"90":13,"145":1,"146":2,"147":3,"155":4,"156":5,"159":6,"164":7,"166":8,"4C":10,"8C":12,"Arna":14,"Brera":15,"Giulietta":16,"GT":17,"GTV":18,"MiTo":19,"RZ":20,"Spider":21,"SZ":22,"Другая":23},
+"Alpina":{"A1":1,"A2":2,"A4":3,"B10":4,"B11":5,"B12":6,"B3":7,"B5":8,"B6":9,"B7":10,"B8":11,"B9":12,"C1":13,"C2":14,"D10":15,"D3":16,"D5":17,"XD3":18,"Другая":19},
+"Aro":{"10":1,"24":2,"Spartana":3,"Другая":4},
+"Asia":{"Hi-topic":1,"Retona":2,"Rocstra":3,"Другая":4},
+"Aston Martin":{"Cygnet":1,"DB7":2,"DB9":3,"DBS":4,"Lagonda":5,"One-77":6,"Rapide":7,"Rapide S":8,"V12 Vantage":9,"V12 Vantage S":10,"V8 Vantage":11,"V8 Vantage S":12,"Vanquish":13,"Virage":14,"Другая":15},
+"Audi":{"50":3,"60":4,"80":5,"90":6,"100":1,"200":2,"A1":7,"A2":8,"A3":9,"A4":10,"A5":11,"A6":12,"A7":13,"A8":14,"Allroad":15,"Cabriolet":16,"Coupe":17,"Q3":18,"Q5":19,"Q7":20,"Quattro":21,"R8":22,"RS1":23,"RS2":24,"RS3":25,"RS4":26,"RS5":27,"RS6":28,"RS7":29,"RS8":30,"RS Q3":31,"S1":32,"S2":33,"S3":34,"S4":35,"S5":36,"S6":37,"S7":38,"S8":39,"SQ5":40,"TT":41,"TT RS":42,"TTS":43,"V8":44,"Другая":45},
+"BAW":{"Fenix":1,"Tonik":2,"Другая":3},
+"Bentley":{"Arnage":1,"Azure":2,"Brooklands":3,"Continental":4,"Continental Flying Spur":5,"Continental GT":6,"Continental GTC":7,"Continental Supersports":8,"Mulsanne":9,"Turbo R":10,"Другая":11},
+"BMW":{"1 серия":1,"2 серия":2,"3 серия":3,"3 серия GT":4,"4 серия":5,"5 серия":6,"5 серия GT":7,"6 серия":8,"7 серия":9,"8 серия":10,"ActiveHybrid 7":11,"i3":12,"i8":13,"M3":14,"M5":15,"M6":16,"X1":17,"X3":18,"X4":19,"X5":20,"X5 M":21,"X6":22,"X6 M":23,"Z1":24,"Z3":25,"Z3 M":26,"Z4":27,"Z4 M":28,"Z8":29,"Другая":30},
+"Brilliance":{"A1":1,"BS2":2,"BS4":3,"BS6":4,"H530":5,"M1":6,"M2":7,"M3":8,"V5":9,"Другая":10},
+"Bufori":{"La Joya":1,"Другая":2},
+"Bugatti":{"EB":1,"Galibier":2,"Veyron":3,"Другая":4},
+"Buick":{"Allure":1,"Century":2,"Electra":3,"Enclave":4,"Excelle":5,"GL8":6,"HRV":7,"LaCrosse":8,"LeSabre":9,"Lucerne":10,"Park Avenue":11,"Rainer":12,"Reatta":13,"Regal":14,"Rendezvous":15,"Riviera":16,"Roadmaster":17,"Royaum":18,"Sedan":19,"Skylark":20,"Terraza":21,"Другая":22},
+"BYD":{"ET":1,"F0":2,"F2":3,"F3":4,"F6":5,"Flyer":6,"S8":7,"Другая":8},
+"Cadillac":{"Allante":1,"ATS":2,"BLS":3,"Brougham":4,"Catera":5,"CTS":6,"CTS-V":7,"DE Ville":8,"DTS":9,"Eldorado":10,"Escalade":11,"Evoq":12,"Fleetwood":13,"LSE":14,"Seville":15,"SRX":16,"STS":17,"Victoria":18,"XLR":19,"Другая":20},
+"Caterham":{"Academy":1,"Classic":2,"Roadsport":3,"Superlight":4,"Другая":5},
+"Changan":{"CS35":1,"Eado":2,"Raeton":3,"SM-8":4,"Z-Chine":5,"Другая":6},
+"ChangFeng":{"Flying PickUp":1,"Flying SUV":2,"Другая":3},
+"Chery":{"A3":1,"A5":2,"Amulet":3,"Arizzo 3":4,"Arizzo 7":5,"Bonus":6,"Bonus 3":7,"CrossEastar":8,"Fora":9,"Indis":10,"Kimo":11,"M11":12,"Oriental Son":13,"QQ":14,"QQ6":15,"Tiggo":16,"Tiggo 5":17,"Very":18,"Другая":19},
+"Chevrolet":{"Alero":1,"Astra":2,"Astro":3,"Avalanche":4,"Aveo":5,"Bel Air":6,"Beretta":7,"Blazer":8,"C10":9,"Camaro":10,"Caprice":11,"Captiva":12,"Cavalier":13,"Celebrity":14,"Celta":15,"Chevette":16,"Classic":17,"Cobalt":18,"Colorado":19,"Corsa":20,"Corsica":21,"Corvette":22,"Cruze":23,"Epica":24,"Equinox":25,"Evanda":26,"Express":27,"Geo Storm":28,"HHR":29,"Impala":30,"Lacetti":31,"Lanos":32,"Lumina":33,"LUV D-MAX":34,"Malibu":35,"Metro":36,"Monte Carlo":37,"Monza":38,"MW":39,"Niva":40,"Nubira":41,"Omega":42,"Orlando":43,"Prizm":44,"Rezzo":45,"S10":46,"Sail":47,"Silverado":48,"Sonic":49,"Spark":50,"SSR":51,"Starcraft":52,"Suburban":53,"Tahoe":54,"Tavera":55,"Tracker":56,"TrailBlazer":57,"Trans Sport":58,"Traverse":59,"Uplander":60,"Van":61,"Vectra":62,"Venture":63,"Viva":64,"Volt":65,"Zafira":66,"Другая":67},
+"Chrysler":{"200":1,"300C":2,"300M":3,"Aspen":4,"Cirrus":5,"Concorde":6,"Crossfire":7,"Daytona Shelby":8,"Dynasty":9,"Fifth Avenue":10,"Grand Voyager":11,"Imperial":12,"Intrepid":13,"LeBaron":14,"LHS":15,"Nassau":16,"Neon":17,"New Yorker":18,"Pacifica":19,"Prowler":20,"PT Cruiser":21,"Saratoga":22,"Sebring":23,"Stratus":24,"Town & Country":25,"Viper":26,"Vision":27,"Voyager":28,"Другая":29},
+"Citroen":{"2 CV":1,"Acadiane":2,"Ami":3,"AX":4,"Berlingo":5,"BX":6,"C1":7,"C15":8,"C2":9,"C25":10,"C3":11,"C35":12,"C3 Picasso":13,"C4":14,"C4 Aircross":15,"C4 Picasso":16,"C5":17,"C6":18,"C8":19,"C-Crosser":20,"C-Elysee":21,"CX":22,"C-Zero":23,"DS2":24,"DS3":25,"DS4":26,"DS5":27,"DS9":28,"Dyane":29,"Evasion":30,"Express":31,"FAF":32,"Grand C4 Picasso":33,"GS":34,"GSA":35,"GT":36,"Jumper":37,"Jumpy":38,"LN":39,"LNA":40,"Mehari":41,"Nemo":42,"Saxo":43,"Synergie":44,"Visa":45,"Xantia":46,"XM":47,"Xsara":48,"Xsara Picasso":49,"ZX":50,"Другая":51},
+"Dacia":25,
+"Dadi":26,
+"Daewoo":27,
+"Daihatsu":28,
+"Daimler":29,
+"Datsun":30,
+"Derways":31,
+"Dodge":32,
+"Dong Feng":33,
+"Doninvest":34,
+"Eagle":35,
+"Ecomotors":36,
+"FAW":37,
+"Ferrari":38,
+"FIAT":39,
+"Ford":40,
+"Geely":41,
+"Geo":42,
+"GMC":43,
+"Great Wall":44,
+"Hafei":45,
+"Haima":46,
+"Haval":47,
+"Hawtai":48,
+"Honda":49,
+"Huanghai":50,
+"Hummer":51,
+"Hurtan":52,
+"Hyundai":53,
+"Infiniti":54,
+"Iran Khodro":55,
+"Isuzu":56,
+"Iveco":57,
+"JAC":58,
+"Jaguar":59,
+"Jeep":60,
+"Jinbei":61,
+"JMC":62,
+"KIA":63,
+"Lamborghini":64,
+"Lancia":65,
+"Land Rover":66,
+"Landwind":67,
+"LDV":68,
+"Lexus":69,
+"LIFAN":70,
+"Lincoln":71,
+"Lotus":72,
+"Luxgen":73,
+"Mahindra":74,
+"Marussia":75,
+"Maserati":76,
+"Maybach":77,
+"Mazda":78,
+"Mercedes-Benz":79,
+"Mercury":80,
+"Metrocab":81,
+"MG":82,
+"MINI":83,
+"Mitsubishi":84,
+"Mitsuoka":85,
+"Morgan":86,
+"Morris":87,
+"Nissan":88,
+"Noble":89,
+"Oldsmobile":90,
+"Opel":91,
+"Pagani":92,
+"Peugeot":93,
+"Plymouth":94,
+"Pontiac":95,
+"Porsche":96,
+"Proton":97,
+"Renault":98,
+"Rolls-Royce":99,
+"Ronart":100,
+"Rover":101,
+"Saab":102,
+"Saleen":103,
+"Saturn":104,
+"Scion":105,
+"SEAT":106,
+"Shuanghuan":107,
+"Skoda":108,
+"SMA":109,
+"Smart":110,
+"Spyker":111,
+"SsangYong":112,
+"Subaru":113,
+"Suzuki":114,
+"Talbot":115,
+"Tata":116,
+"Tesla":117,
+"Tianma":118,
+"Tianye":119,
+"Toyota":120,
+"Trabant":121,
+"Volkswagen":122,
+"Volvo":123,
+"Vortex":124,
+"Wartburg":125,
+"Wiesmann":126,
+"Xin Kai":127,
+"ZX":128,
+"ВАЗ (LADA)":129,
+"ВИС":130,
+"ГАЗ":131,
+"Другая":132,
+"ЗАЗ":133,
+"ЗИЛ":134,
+"ИЖ":135,
+"ЛуАЗ":136,
+"Москвич":137,
+"РАФ":138,
+"ТагАЗ":139,
+"УАЗ":140}
 app.config([
   "$routeProvider","$locationProvider", function($routeProvider,$locationProvider) {
     $routeProvider.when("/", {
@@ -45390,6 +45570,10 @@ app.config([
     $routeProvider.when("/cabinet/", {
       templateUrl: "/templates/layer/main.html",
       controller: "cabinet"
+    });
+    $routeProvider.when("/cabinet/addcar/", {
+      templateUrl: "/templates/layer/main.html",
+      controller: "addcar"
     });
     $locationProvider.html5Mode(true);
   }

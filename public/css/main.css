@@ -129,13 +129,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
   cursor: pointer;
   display: table-cell;
   text-align: center;
-  padding-top: 7px;
   font-size: 13px;
   font-weight: bold;
   color: #FFF;
   border-right: 1px solid #3D3D3D;
   border-left: 1px solid #121111;
 
+}
+.cabinet-menu li a{
+  display: block;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: #FFF;
+}
+.cabinet-menu li a:hover{
+  color: #111;
+  text-decoration: none;
 }
 .cabinet-menu li:hover{
   color: #111;
@@ -147,6 +156,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
   background: -ms-linear-gradient(top,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+}
+.cabinet-menu li.active > a {
+  color: #111;
 }
 .cabinet-menu li.active{
   background: #e2e2e2; /* Old browsers */

@@ -23,7 +23,8 @@ ObjectId = Schema.Types.ObjectId;
     lastname:String,
     phone:String,
     region:String,
-    zip: String
+    zip: String,
+    money:String
   });
 
   autoSchema = new Schema({

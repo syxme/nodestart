@@ -1,0 +1,74 @@
+<div class="content container registration">
+	<div id="registration-form">
+	    <div class="module">
+	        <form class="ui-form" id="entry">
+	            <fieldset>
+	                <h5>Описание</h5>
+	                <h8 class="required-desc">* Обязательное поле</h8>
+	                <ul class="entry-group">
+	                    <li ng-class="{error: errors.marka}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Марка Авто</label>
+	                        	<select ng-change="upmark()" ng-model="data.marka" class="select grid_6 omega normal" type="select">
+                                	<option  ng-repeat="(key,value) in markaAvto">{{key}}</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.login}}</span></div>
+	                    </li>
+						<li ng-class="{error: errors.model}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Модель Авто</label>
+	                        	<select ng-model="data.model" class="select grid_6 omega normal" type="select">
+                                	<option  ng-repeat="(key,value) in model">{{key}}</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.model}}</span></div>
+	                    </li>
+	                </ul>
+	                <div class="regterms">
+	                    Щелкните для отправки ваших регистрационных данных
+	                </div>
+	                <span ng-click="registr()" class="button large blue bt-reg">
+	                    Отправить
+	                </span>
+            	</fieldset>
+	        </form>
+	    </div>
+	</div>
+
+	<div class="sidebar rounded">
+		<div class="module clearfix">
+			<h5 class="header">Зарегистрируйтесь: это быстро!</h5>
+
+			<div class="registration-steps">
+				<div class="registration-step">
+					<div class="num">1</div>
+					<div class="text">
+					<h4>Шаг 1</h4>
+					<p>Заполните форму на этой странице.</p>
+					</div>
+				</div>
+
+				<!--.registration-step -->
+				<div class="registration-step">
+					<div class="num">2</div>
+					<div class="text">
+						<h4>Шаг 2</h4>
+						<p>Нажмите кнопку "Отправить", и когда мы получим заполненную форму, то отправим вам по электронной почте ваши регистрационные данные, включая идентификатор участника и пароль. Пароль обычно приходит на электронную почту в течение пяти-семи минут.</p>
+					</div>
+				</div>
+
+				<!--.step -->
+				<div class="registration-step">
+					<div class="num">3</div>
+					<div class="text">
+						<h4>Шаг 3</h4>
+						<p>Выполните вход в систему и начните искать транспортные средства.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+</div>

@@ -34,6 +34,13 @@ initApi = function(app) {
 			next();
 		}
 	});
+	app.get('/:option/:optionA/', function(req, res,next){ 
+		if (req.params.option!="api"){
+			res.render("index");
+		}else{
+			next();
+		}
+	});
 
 };
 

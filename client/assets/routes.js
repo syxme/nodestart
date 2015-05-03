@@ -17,6 +17,10 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "cabinet"
     });
+    $routeProvider.when("/cabinet/addcar/", {
+      templateUrl: "/templates/layer/main.html",
+      controller: "addcar"
+    });
     $locationProvider.html5Mode(true);
   }
 ]);
