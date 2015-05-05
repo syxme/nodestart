@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.4
+ * jQuery JavaScript Library v2.1.3
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2015-04-28T16:01Z
+ * Date: 2014-12-18T15:11Z
  */
 
 (function( global, factory ) {
@@ -67,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.4",
+	version = "2.1.3",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -531,12 +531,7 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object Error".spli
 });
 
 function isArraylike( obj ) {
-
-	// Support: iOS 8.2 (not reproducible in simulator)
-	// `in` check used to prevent JIT error (gh-2145)
-	// hasOwn isn't used here due to false negatives
-	// regarding Nodelist length in IE
-	var length = "length" in obj && obj.length,
+	var length = obj.length,
 		type = jQuery.type( obj );
 
 	if ( type === "function" || jQuery.isWindow( obj ) ) {
@@ -45113,7 +45108,7 @@ app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$root
 
     }else{
       $rootScope.auth = false;
-      $rootScope.user.firstname = "Гость" 
+      $rootScope.user.firstname = "Гость";
     }
   });
   $rootScope.iheader = "/templates/index/header.html";
@@ -45134,7 +45129,7 @@ app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$root
         $scope.info = "Error";
       }
     });
-  } 
+  };
   $rootScope.linc = function(path) {
     if ($location.path() == path) {
       return "active";
@@ -45178,7 +45173,7 @@ app.controller("addcar", [
 	$scope.markaAvto = markaAvto;
 	$scope.upmark = function(){
 		$scope.model = markaAvto[$scope.data.marka];
-	}
+	};
 	
 	$scope.auth = $rootScope.auth;
   	if (!$scope.auth){
@@ -45205,7 +45200,7 @@ app.controller("mycar", [
 	$scope.markaAvto = markaAvto;
 	$scope.upmark = function(){
 		$scope.model = markaAvto[$scope.data.marka];
-	}
+	};
 	
 	$scope.auth = $rootScope.auth;
   	if (!$scope.auth){
@@ -45221,15 +45216,15 @@ app.controller("login", [
 
 	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
-  		$location.path("/");
+  		$location.path("/cabinet/");
   	}
 	$scope.login = function() {
-		if ($scope.data.login && $scope.data.password != null){
+		if ($scope.data.login && $scope.data.password !== null){
 			$http.post("/api/users/login",$scope.data).success(function(req) {
 				if (req.success){	
-					$rootScope.User = req.req;
+					$rootScope.user = req.req;
 					$rootScope.auth = $scope.auth = true;	
-					$location.path("/cabinet/");
+					$window.location.reload();
 				}else{
 					$scope.error = "Пользователь не найден либо неверный пароль!!!";
 				}
@@ -45238,7 +45233,7 @@ app.controller("login", [
 		}else{
 			$scope.error = "Введите логин и пароль!!!!";
 		}
-	}
+	};
 	$scope.exit = function() {
 		$http.get("/api/users/exit").success(function(req) {
 			if (req.success){	
@@ -45249,7 +45244,7 @@ app.controller("login", [
 				$scope.info = "Error";
 			}
 		});
-	}	
+	};	
  }
 ]);
 app.controller("main", [
@@ -45262,12 +45257,12 @@ app.controller("main", [
 app.controller("menu", [
 "$scope","$location", function($scope,$location) {
 	$scope.linc = function(path) {
-    if ($location.path() == path) {
-      return "active";
-    } else {
-      return "";
-    }
-	}
+	    if ($location.path() == path) {
+	      return "active";
+	    } else {
+	      return "";
+	    }
+	};
 }]);
 app.controller("registration", [
 "$scope", "$http", "$rootScope","$location","$window","$q", function($scope, $http, $rootScope,$location,$window,$q) {
@@ -45295,9 +45290,9 @@ app.controller("registration", [
 					$scope.errors.login = "Такой логин уже существует";
 				}
 			});
-		}
-			
-	}
+		}		
+	};
+
 	function validateEmail(email) {
 		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 		return re.test(email);
@@ -45312,7 +45307,7 @@ app.controller("registration", [
 			$scope.Regions = req.response.items;
 			$scope.state = true;
 		});
-	}
+	};
 	$scope.selectedRegion = function (e){
 		$scope.data.region = e.originalObject.title;
 		region_id = e.originalObject.id;
@@ -45320,15 +45315,15 @@ app.controller("registration", [
 			$scope.Cities = req.response.items;
 		});
 		$scope.citi = true;
-	}
+	};
 	$scope.changeCities = function(str){
 		$http.post('/api/utilits/getcities',{query:str,country_id:country_id,region_id:region_id}).success(function(req) {
 			$scope.Cities = req.response.items;
 		});	
-	}
+	};
 	$scope.selectedCities = function (e){
 		$scope.data.city = e.originalObject.title;
-	}
+	};
 
 	$scope.checkfield = function() {
 		var is = true;
@@ -45385,8 +45380,6 @@ app.controller("registration", [
 		}else{
 			$scope.errors.email = "";
 		}
-
-
 		if (!$scope.data.country){
 			$scope.errors.country = "Выберите страну из списка";
 			is = false;
@@ -45406,12 +45399,11 @@ app.controller("registration", [
 			}
 		}
 		if (is){
-			return true
+			return true;
 		}else{
 			return false;
 		}
-	}	
-	
+	};		
  }
 ]);
 /*function xe (e){
@@ -45564,7 +45556,7 @@ var markaAvto = {
 "Москвич":137,
 "РАФ":138,
 "ТагАЗ":139,
-"УАЗ":140}
+"УАЗ":140};
 app.config([
   "$routeProvider","$locationProvider", function($routeProvider,$locationProvider) {
     $routeProvider.when("/", {
@@ -45580,6 +45572,7 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "login"
     });
+    //cabinet
     $routeProvider.when("/cabinet/", {
       templateUrl: "/templates/layer/main.html",
       controller: "cabinet"
@@ -45592,6 +45585,7 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "mycar"
     });
+    //cabinet
     $locationProvider.html5Mode(true);
   }
 ]);

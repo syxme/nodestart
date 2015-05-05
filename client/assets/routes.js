@@ -13,6 +13,7 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "login"
     });
+    //cabinet
     $routeProvider.when("/cabinet/", {
       templateUrl: "/templates/layer/main.html",
       controller: "cabinet"
@@ -25,6 +26,7 @@ app.config([
       templateUrl: "/templates/layer/main.html",
       controller: "mycar"
     });
+    //cabinet
     $locationProvider.html5Mode(true);
   }
 ]);

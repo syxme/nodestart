@@ -5,11 +5,6 @@ ObjectId = Schema.Types.ObjectId;
 
  var settingsSchema, userSchema;
   mongoose.connect("mongodb://localhost:27017/syxme");
-  //mongoose.connect("mongodb://admin:VWSsE7s7W_fS@"+process.env.OPENSHIFT_MONGODB_DB_HOST+":27017/syxme");
-
-  //0:guest
-  //1:user
-  //2:admin
 
   userSchema = new Schema({
     login:String,
@@ -27,7 +22,7 @@ ObjectId = Schema.Types.ObjectId;
     money:String
   });
 
-  autoSchema = new Schema({
+  carSchema = new Schema({
     user:{ 
       type: ObjectId, 
       ref: "User" },
@@ -36,7 +31,6 @@ ObjectId = Schema.Types.ObjectId;
     model:String,
     doc_type:String,
     probeg:String,
-    doc_type:String,
     crash:String,
     roz_price:String,
     remont_price:String,
@@ -46,21 +40,28 @@ ObjectId = Schema.Types.ObjectId;
     engine:String,
     keys:String,
     status:String,
+    auctionDATA:{
+      targetPrice:Number,
+    },
     photo:[]
   });
-  auсtionsSchema = new Schema({
-    auto:{ 
-      type: ObjectId, 
-      ref: "Auto" },
-    type:String,
+
+  auctionTypeSchema = new Schema({
+    name:String,
+    time:Number,
   });
-  userSchema.statics.UpdateIp = function(req,login){
-    this.update({login:req.session.user.login},{lastip:req.connection.remoteAddress},function(err,log){
-      if (err){
-        console.log("error :models.js: "+err);
-      }
-    });
-  };
+
+  auсtionsSchema = new Schema({
+    cars:[{ 
+      type: ObjectId, 
+      ref: "Car" }],
+    type:{ 
+      type: ObjectId, 
+      ref: "AuctionType" },
+    start:Date,
+    end:Date
+  });
+
   settingsSchema = new Schema({
     id: {
       type: String,
@@ -71,6 +72,9 @@ ObjectId = Schema.Types.ObjectId;
   
 models = {
     User: mongoose.model("User", userSchema),
+    Car: mongoose.model("Car", carSchema),
+    AuctionType: mongoose.model("AuctionType", auctionTypeSchema),    
+    Auctions: mongoose.model("Auctions", auсtionsSchema),    
     Settings: mongoose.model("Settings", settingsSchema),
  };
   

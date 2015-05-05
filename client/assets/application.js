@@ -1,5 +1,5 @@
 
-var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete-alt"]);
+var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete-alt","angularFileUpload"]);
 
 app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$rootScope,$location,$q,$window) {
   var defer = $q.defer();
@@ -11,7 +11,7 @@ app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$root
 
     }else{
       $rootScope.auth = false;
-      $rootScope.user.firstname = "Гость" 
+      $rootScope.user.firstname = "Гость";
     }
   });
   $rootScope.iheader = "/templates/index/header.html";
@@ -32,7 +32,7 @@ app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$root
         $scope.info = "Error";
       }
     });
-  } 
+  };
   $rootScope.linc = function(path) {
     if ($location.path() == path) {
       return "active";

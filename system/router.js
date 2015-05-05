@@ -1,10 +1,21 @@
 var fs = require('fs'),
 	models	= require("./models"),
-	async	= require("async")
+	async	= require("async"),
+	routepr = {},
 	scanApi = require("./utils");
 
 var checkUser = function (req,res,next){
-    arguments.callee.exec(req,res);
+	var path = req.route.path;
+    if (!req.session.user){
+    	if (~routepr[path].indexOf("all")){
+    		next();
+    	}else{
+    		res.status(401);
+    		res.json({success:false,err:"401"});	
+    	}	
+    }else{
+    	next();
+    }
 	
 }
 initApi = function(app) {
@@ -17,8 +28,10 @@ initApi = function(app) {
 			folder	= file[num].replace(/(\w+)\/(\w+)\/(\w+).js/, "$2");
 			api = require("../"+file[num]);
 			Object.keys(api).forEach(function (i) {
-				console.log ("======->".green+"method:"+api[i].method+" params:"+api[i].name+" path:"+"/api/"+folder+'/'+api[i].name);		
-				app[api[i].method]("/api/"+folder+'/'+api[i].name,api[i].execute);	
+				var path = "/api/"+folder+'/'+api[i].name;
+				routepr[path] = api[i].route;
+				console.log ("======->".green+"method:"+api[i].method+" params:"+api[i].name+" path:"+path);		
+				app[api[i].method]("/api/"+folder+'/'+api[i].name,[checkUser,api[i].execute]);	
 			
 			});
 		});

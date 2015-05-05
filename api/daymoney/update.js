@@ -1,6 +1,7 @@
 exports.update = {
 	method	:"post",
 	name	:"update",
+	route	:['all'],
 	execute	:function(req, res) {
 		var data = req.body.data;
 		var id = req.session.user._id; 
@@ -16,6 +17,7 @@ exports.update = {
 exports.get = {
 	method	:"post",
 	name	:"get",
+	route	:['all'],
 	execute	:function(req, res) {
 		var id = req.session.user._id;
 		models.DayMon.findOne({_id:id}, function(err, r) {
@@ -31,6 +33,7 @@ exports.get = {
 exports.payout = {
 	method	:"post",
 	name	:"payout",
+	route	:['all'],
 	execute	:function(req, res) {
 		var id = req.session.user._id;
 		var data = req.body.data;
@@ -48,6 +51,7 @@ exports.payout = {
 exports.rmtr = {
 	method	:"post",
 	name	:"rmtr",
+	route	:['all'],
 	execute	:function(req, res) {
 		var id = req.session.user._id;
 		var id_rm = req.body.id;
@@ -64,6 +68,7 @@ exports.rmtr = {
 exports.valse = {
 	method	:"get",
 	name	:"varate",
+	route	:['all'],
 	execute	:function(req, res) {
 		var id = req.session.user._id;
 		var id_rm = req.body.id;

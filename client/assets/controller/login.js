@@ -7,15 +7,15 @@ app.controller("login", [
 
 	$scope.auth = $rootScope.auth;
   	if ($scope.auth){
-  		$location.path("/");
+  		$location.path("/cabinet/");
   	}
 	$scope.login = function() {
-		if ($scope.data.login && $scope.data.password != null){
+		if ($scope.data.login && $scope.data.password !== null){
 			$http.post("/api/users/login",$scope.data).success(function(req) {
 				if (req.success){	
-					$rootScope.User = req.req;
+					$rootScope.user = req.req;
 					$rootScope.auth = $scope.auth = true;	
-					$location.path("/cabinet/");
+					$window.location.reload();
 				}else{
 					$scope.error = "Пользователь не найден либо неверный пароль!!!";
 				}
@@ -24,7 +24,7 @@ app.controller("login", [
 		}else{
 			$scope.error = "Введите логин и пароль!!!!";
 		}
-	}
+	};
 	$scope.exit = function() {
 		$http.get("/api/users/exit").success(function(req) {
 			if (req.success){	
@@ -35,6 +35,6 @@ app.controller("login", [
 				$scope.info = "Error";
 			}
 		});
-	}	
+	};	
  }
 ]);

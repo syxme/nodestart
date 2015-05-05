@@ -24,17 +24,91 @@
 	                        </div>
 	                        <div class="optional"><span class="field-validation-valid">{{errors.model}}</span></div>
 	                    </li>
-	                    <li ng-class="{error: errors.firstname}">
-	                        <label class="alpha grid_3">* Имя</label>
-	                        <input class="group-input omega reg" ng-model="data.firstname" type="text" value="" maxlength="20">
-	                        <div class="optional"><span class="field-validation-valid">{{errors.firstname}}</span></div>
+	                    <li ng-class="{error: errors.type_kuzov}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Тип кузова</label>
+	                        	<select ng-model="data.type_kuzov" class="select grid_6 omega normal" type="select">
+	                        		<option value="">Тип кузова</option>
+	                        		<option value="869">Седан</option>
+	                        		<option value="872">Хетчбэк</option>
+	                        		<option value="870">Универсал</option>
+	                        		<option value="4804">Внедорожник</option>
+	                        		<option value="865">Кабриолет</option>
+	                        		<option value="4805">Кроссовер</option>
+	                        		<option value="866">Купе</option>
+	                        		<option value="867">Лимузин</option>
+	                        		<option value="4806">Минивэн</option>
+	                        		<option value="868">Пикап</option>
+	                        		<option value="871">Фургон</option>
+	                        		<option value="11695">Микроавтобус</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.type_kuzov}}</span></div>
+	                    </li>
+	                    <li ng-class="{error: errors.doc_type}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Тип Документов</label>
+	                        	<select ng-change="upmark()" ng-model="data.doc_type" class="select grid_6 omega normal" type="select">
+                                	<option value='1'>1</option>
+                                	<option value='2'>2</option>
+                                	<option value='3'>3</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.doc_type}}</span></div>
+	                    </li>
+	                    <li ng-class="{error: errors.probeg}">
+	                        <label class="alpha grid_3">* Пробег(например 150000)</label>
+	                        <input class="group-input omega reg" ng-model="data.probeg" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.probeg}}</span></div>
 	                        <div class="clear"></div>
+	                    </li>
+	                    <li ng-class="{error: errors.crash}">
+	                        <label class="alpha grid_3">Повреждение</label>
+	                        <input class="group-input omega reg" ng-model="data.crash" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.crash}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                     <li ng-class="{error: errors.roz_price}">
+	                        <label class="alpha grid_3">*Розничная стоимость:</label>
+	                        <input class="group-input omega reg" ng-model="data.roz_price" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.roz_price}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                     <li ng-class="{error: errors.remont_price}">
+	                        <label class="alpha grid_3">*Стоймость ремонта</label>
+	                        <input class="group-input omega reg" ng-model="data.remont_price" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.remont_price}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                     <li ng-class="{error: errors.vin}">
+	                        <label class="alpha grid_3">* VIN Номер</label>
+	                        <input class="group-input omega reg" ng-model="data.vin" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.vin}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                    <li ng-class="{error: errors.type_kuzov}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Ключи в наличии?</label>
+	                        	<select ng-model="data.type_kuzov" class="select grid_6 omega normal" type="select">
+	                        		<option value="1">ДА</option>
+	                        		<option value="0">НЕТ</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.type_kuzov}}</span></div>
+	                    </li>
+	                    <li ng-class="{error: errors.photo}">
+	                    <input type="file" nv-file-select="" uploader="uploader" />
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">Загрузка фото</label>
+	                        	
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.type_kuzov}}</span></div>
 	                    </li>
 	                </ul>
 	                <div class="regterms">
-	                    Щелкните для отправки ваших регистрационных данных
+	                    Щелкните для отправки данных
 	                </div>
-	                <span ng-click="registr()" class="button large blue bt-reg">
+	                <span ng-click="sendavto()" class="button large blue bt-reg">
 	                    Отправить
 	                </span>
             	</fieldset>

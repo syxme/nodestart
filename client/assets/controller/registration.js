@@ -24,9 +24,9 @@ app.controller("registration", [
 					$scope.errors.login = "Такой логин уже существует";
 				}
 			});
-		}
-			
-	}
+		}		
+	};
+
 	function validateEmail(email) {
 		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 		return re.test(email);
@@ -41,7 +41,7 @@ app.controller("registration", [
 			$scope.Regions = req.response.items;
 			$scope.state = true;
 		});
-	}
+	};
 	$scope.selectedRegion = function (e){
 		$scope.data.region = e.originalObject.title;
 		region_id = e.originalObject.id;
@@ -49,15 +49,15 @@ app.controller("registration", [
 			$scope.Cities = req.response.items;
 		});
 		$scope.citi = true;
-	}
+	};
 	$scope.changeCities = function(str){
 		$http.post('/api/utilits/getcities',{query:str,country_id:country_id,region_id:region_id}).success(function(req) {
 			$scope.Cities = req.response.items;
 		});	
-	}
+	};
 	$scope.selectedCities = function (e){
 		$scope.data.city = e.originalObject.title;
-	}
+	};
 
 	$scope.checkfield = function() {
 		var is = true;
@@ -114,8 +114,6 @@ app.controller("registration", [
 		}else{
 			$scope.errors.email = "";
 		}
-
-
 		if (!$scope.data.country){
 			$scope.errors.country = "Выберите страну из списка";
 			is = false;
@@ -135,11 +133,10 @@ app.controller("registration", [
 			}
 		}
 		if (is){
-			return true
+			return true;
 		}else{
 			return false;
 		}
-	}	
-	
+	};		
  }
 ]);

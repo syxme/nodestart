@@ -1,6 +1,7 @@
 exports.update = {
 	method	:"post",
 	name	:"register",
+	route	:['all'],
 	execute	:function(req, res) {
 	var data = req.body;
 		models.User.findOne({login:data.login}, function(err, user) {

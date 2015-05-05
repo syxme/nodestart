@@ -7,7 +7,7 @@ app.controller("mycar", [
 	$scope.markaAvto = markaAvto;
 	$scope.upmark = function(){
 		$scope.model = markaAvto[$scope.data.marka];
-	}
+	};
 	
 	$scope.auth = $rootScope.auth;
   	if (!$scope.auth){

@@ -3,6 +3,7 @@ var api = "http://api.vk.com/method/";
 exports.getcountry = {
 	method	:"post",
 	name	:"getcountry",
+	route	:['all'],
 	execute	:function(req, res) {
 		var data = '';
 		http.get(api+"database.getCountries?v=5.5&need_all=1&count=1000", function(rews) {
@@ -18,6 +19,7 @@ exports.getcountry = {
 exports.getRegions = {
 	method	:"post",
 	name	:"getregions",
+	route	:['all'],
 	execute	:function(req, res) {
 		var data = '';
 		var country_id = req.body.country_id;
@@ -36,6 +38,7 @@ exports.getRegions = {
 exports.getCities = {
 	method	:"post",
 	name	:"getcities",
+	route	:['all'],
 	execute	:function(req, res) {
 		var data = '';
 		var country_id = req.body.country_id;

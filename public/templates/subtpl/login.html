@@ -12,12 +12,12 @@
 			            <fieldset>
 			               <div class="member-account-box rounded clearfix">
 			                  <label for="UserName">Логин</label>
-			                  <input class="right" ng-model="data.login" type="text" value="">
+			                  <input class="right" name="login" ng-model="data.login" type="text" value="">
 			                  <span class="field-validation-valid"></span>
 			               </div>
 			               <div class="member-account-box rounded clearfix">
 			                  <label for="Password">Пароль</label>
-			                  <input ng-model="data.password" type="password">
+			                  <input ng-model="data.password" name="password" type="password">
 			                  <span class="field-validation-valid"></span>
 			               </div>
 			               <span ng-click="login()" class="button large blue right">Войти в учетную запись</span>
