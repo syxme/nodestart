@@ -31,9 +31,8 @@ app.controller("registration", [
 		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 		return re.test(email);
 	}
-	$rootScope.countrys().then(function(e){
-		$scope.country = e;
-	});	
+
+	$scope.country = countrys.items;
 	$scope.selectedCountry = function(e){
 		country_id = e.originalObject.id;
 		$scope.data.country = e.originalObject.title;

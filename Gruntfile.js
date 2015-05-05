@@ -12,6 +12,7 @@ module.exports = function (grunt) {
               "public/css/grunt/font-a/css/font-awesome.min.css",
               "public/css/styles1.min.css",
               "public/css/styles3.min.css",
+              "public/css/angucomplete.css",
               "public/css/main.css",
 
               ]
@@ -30,9 +31,11 @@ module.exports = function (grunt) {
              "node_modules/angular/angular.js",
              "node_modules/angular-route/angular-route.js",
              "node_modules/angular-animate/angular-animate.js",
+             "bower_components/angular-file-upload/angular-file-upload.js",
              "public/js/plugins/angucomplete-alt.js",
              "bower_components/lodash/dist/lodash.js",
              "bower_components/restangular/dist/restangular.js",
+             "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
              "client/assets/**/*.js"
 
   				]
@@ -52,6 +55,7 @@ module.exports = function (grunt) {
              "node_modules/angular/angular.js",
              "node_modules/angular-route/angular-route.js",
              "node_modules/angular-animate/angular-animate.js",
+             "bower_components/angular-file-upload/angular-file-upload.js",
              "public/js/plugins/angucomplete-alt.js",
              "bower_components/lodash/dist/lodash.js",
              "bower_components/restangular/dist/restangular.js",

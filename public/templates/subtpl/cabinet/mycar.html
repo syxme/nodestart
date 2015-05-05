@@ -1,1 +1,86 @@
-mycar
+<style>
+.cabinetCars{
+   /*margin-top: 30px;*/
+   margin: 7px;
+   list-style: none;
+}
+.cabinetCars li{
+   height: 128px;
+   padding: 10px;
+   border: 1px solid #D8D8D8;
+   margin-bottom: 7px;
+}
+.cabinetCars li.active{
+	background-color: #B7FF9E;
+}
+.cabinetCars li .headname{
+  margin-left: 160px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #568CFF;
+}
+.cabinetCars li .img{
+  width: 128px;
+  height: 128px;
+  background-color: #444;
+  float: left;
+}	
+.cabinetCars li .img img{
+  width: 128px;
+  height: 128px;
+}	
+.cabinetCars li .descript{
+	margin-left: 160px;
+	height: 107px;
+}
+.cabinetCars li .descript .block_D{
+  float: left;
+  width: 240px;
+}
+
+.cabinetCars li .descript .block_D *{
+  font-size: 13px;
+  margin-top: 15px;
+}
+.cabinetCars li .descript .block_D.buttons{
+	float: right;
+}
+.cabinetCars li .descript .block_D.buttons *{
+	float: right;
+}
+.cabinetCars li .descript .block_D label > x{
+  font-weight: bold;
+  color: #147086;
+}
+
+</style>
+
+<div class="module">
+	<fieldset>
+		<ul class="cabinetCars">
+			<li ng-repeat="car in cars">
+				<div class="img">
+					<img src="http://img.copartimages.com/website/data/pix/20150409/21353805_1X.JPG">
+				</div>
+				<div class="headname">{{car.marka}} {{car.model}} {{car.year}}</div>
+				<div class="descript">
+					<div class="block_D">
+						<label><x>Тип документов:</x> {{car.doc_type}}</label>
+						<label><x>Пробег:</x> {{car.probeg | Numbers}} км</label>
+						<label><x>VIN:</x>{{car.vin}}</label>
+					</div>
+
+					<div class="block_D">
+						<label><x>Розничная стоимость:</x>{{car.roz_price| Numbers}} р.</label>
+						<label><x>Стоймость ремонта:</x>{{car.remont_price| Numbers}} р.</label>
+						<label><x>Тип кузова:</x>{{car.type_kuzov | type_kuzov}}</label>
+					</div>
+					<div class="block_D buttons">
+						<span ng-click="auction($index)" class="button large blue right">Выставить на продажу</span>
+						<span ng-click="remove(car._id)" class="button large blue right">Удалить</span>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</fieldset>
+</div>

@@ -6,16 +6,15 @@ var fs = require('fs'),
 
 var checkUser = function (req,res,next){
 	var path = req.route.path;
-    if (!req.session.user){
-    	if (~routepr[path].indexOf("all")){
-    		next();
-    	}else{
-    		res.status(401);
-    		res.json({success:false,err:"401"});	
-    	}	
-    }else{
-    	next();
-    }
+	if (~routepr[path].indexOf("all")){
+		next();
+	}else if (~routepr[path].indexOf("user")&&req.session.user){
+		next()
+	}else{
+		res.status(401);
+		res.json({success:false,err:"401"});	
+	}	
+   
 	
 }
 initApi = function(app) {

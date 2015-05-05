@@ -1,5 +1,5 @@
 
-var app = angular.module("AuctionR", ["ngRoute","ngAnimate","restangular","angucomplete-alt","angularFileUpload"]);
+var app = angular.module("AuctionR", ["ngRoute","ngAnimate","ui.bootstrap","restangular","angucomplete-alt","angularFileUpload"]);
 
 app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$rootScope,$location,$q,$window) {
   var defer = $q.defer();
@@ -43,6 +43,25 @@ app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$root
 
 }]);
 
+
+
+
+app.filter('Numbers', [function() {
+  return function(ocr) { 
+    if (ocr){
+      return ocr.replace(/\d(?=(?:\d{3})+\b)/g, "$&" + ' ');
+    }
+    else{
+      return "";
+    }
+  };
+}]);
+
+app.filter('type_kuzov', [function() {
+  return function(ocr) { 
+    return type_kuzov[ocr];
+  };
+}]);
 app.config([
   "RestangularProvider", function(RestangularProvider) {
    return RestangularProvider.setBaseUrl("/api/");
