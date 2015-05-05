@@ -1,16 +1,18 @@
 exports.index = {
 	method	:"get",
 	name	:"",
-	route	:['all'],
-	execute	:function(req, res) {
+	route	:['user'],
+	execute	:function(req, res,next) {
 		models.User.find({}, function(err, user) {
 			if (err) {
-				res.json(err);
+				next(err);
 			}else{
 				if (user){
-					res.json(user);
+					res.response = user;
+					next();
 				}else{
-					res.json({success:false});
+					res.statusCode = 401;
+					next("Non user");
 				}
 			}
 		});

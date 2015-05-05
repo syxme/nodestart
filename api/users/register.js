@@ -2,19 +2,20 @@ exports.update = {
 	method	:"post",
 	name	:"register",
 	route	:['all'],
-	execute	:function(req, res) {
+	execute	:function(req, res,next) {
 	var data = req.body;
 		models.User.findOne({login:data.login}, function(err, user) {
 			if (!user){
 				models.User.create(data, function(err, req) {
 					if (err) {
-						res.json(err);
+						next(err);
 					}else{
-						res.json({success:true,req:req});
+						res.response = req;
+						next();
 					}
 				});
 			}else{
-				res.json({success:false});
+				return next("clone login");
 			}
 		});
 	}

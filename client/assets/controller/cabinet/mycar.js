@@ -1,5 +1,5 @@
 app.controller("mycar", [
-"$scope", "$http","$location", function($scope, $http, $location) {
+"$scope","$http","$location","$modal", function($scope, $http, $location,$modal) {
 	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
 	$scope.$root.cabinet = "/templates/subtpl/cabinet/mycar.html";
 	$scope.contentTitle = "Мои автомобили";
@@ -23,11 +23,21 @@ app.controller("mycar", [
 		});
 	};
 
-	// $scope.auction = function(i){
-	// 	var modalInstance = $modal.open({
-	// 		templateUrl:"/templates/modal/auctionadd.html"
-	// 	});
-	// };
+
+	$scope.auction = function(i){
+		var modalInstance = $modal.open({
+		  templateUrl:'/templates/modal/auctionadd.html',
+		  backdrop: false,
+		  controller: [
+		    "$scope", function(modalScope) {
+		      modalScope.isShown = true;
+		       modalScope.close = function(todo, reason) {
+		        return modalScope.$close([todo, reason]);
+		      };
+		    }
+		  ]
+		});
+	};
 
 	$scope.auth = $scope.$root.auth;
   	if (!$scope.auth){

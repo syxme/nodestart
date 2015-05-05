@@ -2,15 +2,15 @@ exports.addcar = {
 	method	:"post",
 	name	:"addcar",
 	route	:['user'],
-	execute	:function(req, res) {
+	execute	:function(req, res, next) {
 		var data = req.body;
 		var user = req.session.user._id;
 		data.user = user;
 			models.Car.create(data, function(err, resp) {
 				if (resp){
-					res.json({success:true});
+					next();
 				}else{
-					res.json({success:false});
+					next("error");
 				}
 			});
 	}
@@ -23,9 +23,10 @@ exports.cars = {
 		var user = req.session.user._id;
 			models.Car.find({user:user}).populate('user').exec(function(err, resp) {
 				if (resp){
-					res.json(resp);
+					res.response = resp;
+					next();
 				}else{
-					res.json({success:false});
+					next("error");
 				}
 			});
 	}
@@ -39,9 +40,9 @@ exports.rmcar = {
 		var data = req.body;
 			models.Car.remove(data,function(err, resp) {
 				if (resp){
-					res.json(resp);
+					next();
 				}else{
-					res.json({success:false});
+					next("error");
 				}
 			});
 	}

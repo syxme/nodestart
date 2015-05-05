@@ -3,7 +3,7 @@ exports.login = {
 	method	:"post",
 	name	:"login",
 	route	:['all'],
-	execute	:function(req, res) {
+	execute	:function(req, res, next) {
 		var data = req.body;
 		models.User.findOne({login:data.login}, function(err, user) {
 			if (err) {
@@ -12,13 +12,13 @@ exports.login = {
 				if (user){
 					if (user.pass == data.pass){
 						req.session.user = user;
-						user = ld.omit(user.toObject(),['__v','password','login']);
-						res.json({success:true,req:user});				
+						res.response = ld.omit(user.toObject(),['__v','password','login']);
+						next();				
 					}else{
-						res.json({success:false});
+						next("not valid");
 					}
 				}else{
-					res.json({success:false});
+					next("not valid");
 				}
 			}
 	    });
@@ -28,8 +28,8 @@ exports.exit = {
 	method	:"get",
 	name	:"exit",
 	route	:['all'],	
-	execute	:function(req, res) {
+	execute	:function(req, res, next) {
 		delete req.session.user;
-		res.json({success:true});
+		next();	
 	}
 }	

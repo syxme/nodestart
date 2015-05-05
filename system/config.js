@@ -1,3 +1,4 @@
 exports.config = config = {
-	user:{}	
+	user:{},
+	protect:{}
 }

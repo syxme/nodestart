@@ -37,7 +37,6 @@ module.exports = function (grunt) {
              "bower_components/restangular/dist/restangular.js",
              "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
              "client/assets/**/*.js"
-
   				]
   			}
   		}
@@ -59,7 +58,8 @@ module.exports = function (grunt) {
              "public/js/plugins/angucomplete-alt.js",
              "bower_components/lodash/dist/lodash.js",
              "bower_components/restangular/dist/restangular.js",
-             "client/assets/**/*.js"   
+             "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+             "client/assets/**/*.js"
   			    ]
           }
         }
