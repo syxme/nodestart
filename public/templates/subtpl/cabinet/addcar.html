@@ -24,6 +24,12 @@
 	                        </div>
 	                        <div class="optional"><span class="field-validation-valid">{{errors.model}}</span></div>
 	                    </li>
+	                    <li ng-class="{error: errors.firstname}">
+	                        <label class="alpha grid_3">* Имя</label>
+	                        <input class="group-input omega reg" ng-model="data.firstname" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.firstname}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
 	                </ul>
 	                <div class="regterms">
 	                    Щелкните для отправки ваших регистрационных данных
@@ -38,7 +44,7 @@
 
 	<div class="sidebar rounded">
 		<div class="module clearfix">
-			<h5 class="header">Зарегистрируйтесь: это быстро!</h5>
+			<h5 class="header">Добавьте авто: это просто!</h5>
 
 			<div class="registration-steps">
 				<div class="registration-step">
