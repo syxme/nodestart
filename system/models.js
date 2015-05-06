@@ -1,6 +1,8 @@
 var ObjectId, Schema, exports, mongoose;
 mongoose = require("mongoose");
 Schema = mongoose.Schema;
+utl = require("./utils"),
+ld = require("lodash"),
 ObjectId = Schema.Types.ObjectId;
 
  var settingsSchema, userSchema;
@@ -21,6 +23,38 @@ ObjectId = Schema.Types.ObjectId;
     zip: String,
     money:String
   });
+  userSchema.statics.getUser = function(req,cb){
+    this.findOne({_id:req.session.user._id}, function(err, user) {
+      if (err) {
+        cb(err,false);
+      }else{
+        if (user){
+          user = ld.omit(user.toObject(),['__v','password','login']);
+          user.money = money = utl.getRUR(user.money);
+          cb(false,user);
+        }else{
+          cb("not user",false) 
+        }
+      }
+    });
+  };
+
+  userSchema.statics.addmoney = function(req,money,cb){
+    this.getUser(req,function(err,x){
+      if (x.money){
+        money = utl.setPointRUR(money) + utl.setPointRUR(x.money);
+      }else{
+        money = utl.setPointRUR(money); 
+      }
+      models.User.update({_id:req.session.user._id},{money:money},function(err,log){
+        if (!err){
+          cb(err,log);
+        }else{
+          cb(err,log);
+        }
+      });
+    });
+  };
 
   carSchema = new Schema({
     user:{ 
@@ -30,6 +64,7 @@ ObjectId = Schema.Types.ObjectId;
     marka:String,
     model:String,
     doc_type:String,
+    year:Number,
     probeg:String,
     crash:String,
     roz_price:String,
@@ -42,6 +77,14 @@ ObjectId = Schema.Types.ObjectId;
     status:String,
     auctionDATA:{
       targetPrice:Number,
+      lastbid:{
+        user:{
+          user:{ 
+            type: ObjectId, 
+            ref: "User" },
+          money:Number
+        }
+      }
     },
     photo:[]
   });

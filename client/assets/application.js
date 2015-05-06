@@ -18,6 +18,7 @@ $http.post("/api/users/auth").success(function(response) {
   });
   $rootScope.iheader = "/templates/index/header.html";
   $rootScope.icontent = "/templates/index/content.html";
+ // $rootScope.title = "AUCTION INTRO";
   $rootScope.countrys = function(){
     $http.post('/api/utilits/getcountry').success(function(req) {
       defer.resolve(req.response.items);
@@ -35,14 +36,10 @@ $http.post("/api/users/auth").success(function(response) {
       }
     });
   };
-  $rootScope.linc = function(path) {
-    if ($location.path() == path) {
-      return "active";
-    } else {
-      return "";
-    }
-  };
 
+  $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+        $rootScope.title = current.$$route.title;
+    });
 }]);
 
 

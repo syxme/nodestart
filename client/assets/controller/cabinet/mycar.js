@@ -13,10 +13,10 @@ app.controller("mycar", [
 
 
 
-	$scope.remove = function(id){
+	$scope.remove = function(id,idx){
 		$http.post("/api/cabinet/rmcar",{_id:id}).success(function(req) {
-			if (req){
-				$scope.cars = req;
+			if (req.success){
+				$scope.cars.splice(idx,1);
 			}else{
 				console.log("error");
 			}

@@ -5,15 +5,12 @@ exports.auth = {
 	route	:['all'],
 	execute	:function(req, res, next) {
 		if (req.session.user){
-			models.User.findOne({login:req.session.user.login}, function(err, user) {
-				if (err) {
-					next(err);
-				}else{
-					if (user){
-						user = ld.omit(user.toObject(),['__v','password','login']);
-						res.response = user;
-						next();
-					}
+			models.User.getUser(req,function(err,c){
+				if (!err){	
+					res.response = c;
+					next();
+				}else{	
+					next("error user");
 				}
 			});
 		}else{

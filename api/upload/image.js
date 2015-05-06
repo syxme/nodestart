@@ -8,7 +8,7 @@ ld = require("lodash");
 tmp = require("os").tmpdir();
 path = require("path");
 sizeOf = require("image-size");
-upload_dir = path.join(__dirname + "/../../public", "uploadsimg");
+upload_dir = path.join(__dirname + "/../../public", "base/images");
 if (!fs.existsSync(upload_dir)) {
   fs.mkdirSync(upload_dir);
 }
@@ -71,7 +71,7 @@ exports.image = {
     form.on("close", function() {
       if (!pendingParts) {
         if (udid != null) {
-          udid = "/uploadsimg/" + udid;
+          udid = "/base/images/" + udid;
           res.response = {
             img: udid,
           };

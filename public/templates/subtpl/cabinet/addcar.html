@@ -56,6 +56,15 @@
 	                        </div>
 	                        <div class="optional"><span class="field-validation-valid">{{errors.doc_type}}</span></div>
 	                    </li>
+	                     <li ng-class="{error: errors.year}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Год выпуска</label>
+	                        	<select ng-model="data.year" class="select grid_6 omega normal" type="select">
+                                	<option value='{{q}}'ng-repeat="q in years">{{q}}</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.year}}</span></div>
+	                    </li>
 	                    <li ng-class="{error: errors.probeg}">
 	                        <label class="alpha grid_3">* Пробег(например 150000)</label>
 	                        <input class="group-input omega reg" ng-model="data.probeg" type="text" value="" maxlength="20">
@@ -143,33 +152,10 @@
 									<span>Добавить фотографию</span>
 								</div>
 	                    	</div>
-	                        <style type="text/css">
-	                        	.imagelist{
-								  list-style: none;
-								  margin-left: 0px;
-								  height: 77px;
-								  overflow-x: initial;
-								}
-	                        	
-	                        	.imagelist li{
-								  margin: 3px;
-								  display: inline-block;
-								  border: 1px solid #6483FF;
-								  box-shadow: 0px 0px 11px -3px;
-	                        	}
-	                        	.imagelist li img{
-								  width: 90px;
-								  vertical-align: middle;
-								  height: 65px;
-	                        	}
-	                        	.outside{
-
-	                        	}
-	                        </style>
-	                        <div ng-show="data.photo[0]" class="outside">
-		                        <ul class="imagelist">
-		                        	<li ng-repeat="p in data.photo"><img src="{{p}}"></li>
-		                        </ul>
+	                        <div ng-show="data.photo[0]" class="clearfix">
+		                        <div class="imagelist clearfix">
+		                        	<div ng-repeat="p in data.photo"><img src="{{p}}"></div>
+		                        </div>
 	                        <div>
 	                        <div class="optional"><span class="field-validation-valid">{{errors.type_kuzov}}</span></div>
 	                    </li>

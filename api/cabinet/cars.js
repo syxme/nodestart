@@ -20,7 +20,7 @@ exports.cars = {
 	name	:"cars",
 	route	:['user'],
 	execute	:function(req, res, next) {
-		var user = req.session.user._id;
+			var user = req.session.user._id;
 			models.Car.find({user:user}).populate('user').exec(function(err, resp) {
 				if (resp){
 					res.response = resp;
@@ -36,8 +36,8 @@ exports.rmcar = {
 	name	:"rmcar",
 	route	:['user'],
 	execute	:function(req, res, next) {
-		var user = req.session.user._id;
-		var data = req.body;
+			var user = req.session.user._id;
+			var data = req.body;
 			models.Car.remove(data,function(err, resp) {
 				if (resp){
 					next();

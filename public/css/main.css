@@ -313,3 +313,58 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
     width: 900px;
   }
 }
+
+.imagelist{
+  margin-left: 0px;
+}
+            
+.imagelist div{
+  margin: 3px;
+  border: 1px solid #B0B0B0;
+  box-shadow: 0px 0px 6px -2px;
+  float: left;
+  width: 88px;
+  height: 65px;
+}
+.imagelist div img{
+  width: 88px;
+  vertical-align: middle;
+  height: 65px;
+}
+.upload-input{
+  background-color: #EDF0F8;
+  width: 100%;
+  height: 60px;
+  border: 1px solid #DCE8F7;
+  text-align: center;
+  color: #738392;
+  font-size: 1.18em;
+  overflow: hidden;
+  line-height: 16px;
+  position: relative;
+}
+          .input-invisibil{
+  filter: alpha(opacity=1);
+  -moz-opacity: 0.00;
+  opacity: 0.00;
+  cursor: pointer;
+  height: 58px;
+  width: 937px;;
+    position: absolute;
+    left: 0px;
+  }
+.upload-input:hover{
+  background-color: #E2E9F1;  
+}
+
+.s2-photo-upload{
+  padding-top: 22px;
+}
+.s2-photo-upload >span{
+  background: url('http://vk.com/images/camera.png') left 0px no-repeat;
+  text-align: center;
+  padding: 3px 0px 3px 35px;
+  color: #738392!important;
+  font-size: 1.18em!important;
+  line-height: 16px!important;
+}

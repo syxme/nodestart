@@ -6,10 +6,10 @@ app.controller("addcar", [
 	$scope.data = {};
 	$scope.markaAvto = markaAvto;
 	$scope.data.photo = [];
-	console.log($scope.data.photo);
-	// var uploader = $scope.uploader = new FileUploader({
- //        url: 'upload.php'
- //    });
+	$scope.years = [];
+
+	for (var i=1900;i<=2015;i++){$scope.years.push(i);} 
+
     var	uploader = $scope.uploader = new FileUploader({
 		  url: '/api/upload/image',
 		  alias: "image",
@@ -21,12 +21,6 @@ app.controller("addcar", [
     	}else{
     		$scope.data.photo.push(response.img);
     	}
-    	console.log(response.img);
-    	console.log($scope.data.photo);
-	 //  	return response.id = $scope.me._id + "_" + Math.floor(Math.random() * (256000 - 64 + 1)) + 64;
-	 //  	$scope.offer.photos.unshift(response);
-		// $scope.untils.progress = 0 + '%';
-		// $scope.untils.previewImage = $scope.offer.photos[$scope.offer.photos.length - 1].photo_604;
 	};
 
 	$scope.upmark = function(){

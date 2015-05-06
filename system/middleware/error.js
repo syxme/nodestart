@@ -1,3 +1,4 @@
+var st = require("stack-trace");
 module.exports = function(error, req, res, next) {
   var e, info, message, stack, trace;
   if (!error) {

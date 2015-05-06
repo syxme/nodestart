@@ -24,10 +24,16 @@
   height: 128px;
   background-color: #444;
   float: left;
+  position: relative;
 }	
 .cabinetCars li .img img{
   width: 128px;
-  height: 128px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }	
 .cabinetCars li .descript{
 	margin-left: 160px;
@@ -52,13 +58,29 @@
   font-weight: bold;
   color: #147086;
 }
-
+.btn-edit-car{
+	position: absolute;
+  right: 20px;
+}
+.btn-edit-car .button-lat{
+  display: inline-block;
+  color: #454545;
+  cursor: pointer;
+}
+.btn-edit-car .button-lat:hover{
+	color: #4CAD24;
+}
 </style>
 
 <div class="module">
 	<fieldset>
 		<ul class="cabinetCars">
 			<li ng-repeat="car in cars">
+			<div class="btn-edit-car">
+				<div class="button-lat" ng-click="remove(car._id)">
+					<i class="fa fa-times fa-2x"></i>
+				</div>
+			</div>
 				<div class="img">
 					<img ng-src="{{car.photo[0]}}">
 				</div>
@@ -77,7 +99,6 @@
 					</div>
 					<div class="block_D buttons">
 						<span ng-click="auction($index)" class="button large blue right">Выставить на продажу</span>
-						<span ng-click="remove(car._id)" class="button large blue right">Удалить</span>
 					</div>
 				</div>
 			</li>

@@ -21,6 +21,6 @@
     "restangular": "~1.4.0",
     "lodash": "~3.6.0",
     "angular-file-upload": "~1.1.5",
-    "angular-bootstrap": "0.7.0"
+    "angular-bootstrap": "0.6.0"
   }
 }

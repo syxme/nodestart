@@ -5,12 +5,13 @@ var fs = require('fs'),
 	scanApi = require("./utils"),
 	mdres	= require("./middleware/response"),
 	user	= require("./middleware/user"),
-	error	= require("./middleware/error");
+	error	= require("./middleware/error"),
+	index = fs.readFileSync("public/index.hbs", "utf8");
 
 initApi = function(app) {
 	var folder,api;
 
-	scanApi("api", function(err, file) {
+	scanApi.walk("api", function(err, file) {
 		Object.keys(file).forEach(function (num) {
 			console.log("==============================FILE==============================".yellow);
 			console.log("==->".green.bold+file[num]);
@@ -25,24 +26,24 @@ initApi = function(app) {
 			});
 		});
 	});
-	app.get('/', function(req, res){res.render("index");});
+	app.get('/', function(req, res){res.send(index);});
 	app.get('/:option/', function(req, res,next){ 
 		if (req.params.option!="api"){
-			res.render("index");
+			res.send(index);
 		}else{
 			next();
 		}
 	});
 	app.get('/:option/:optionA/', function(req, res,next){ 
 		if (req.params.option!="api"){
-			res.render("index");
+			res.send(index);
 		}else{
 			next();
 		}
 	});
 	app.get('/:option/:optionA/:optionB/', function(req, res,next){ 
 		if (req.params.option!="api"){
-			res.render("index");
+			res.send(index);
 		}else{
 			next();
 		}
