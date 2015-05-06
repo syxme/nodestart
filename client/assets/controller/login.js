@@ -13,7 +13,7 @@ app.controller("login", [
 		if ($scope.data.login && $scope.data.password !== null){
 			$http.post("/api/users/login",$scope.data).success(function(req) {
 				if (req.success){	
-					$rootScope.user = req.req;
+					$rootScope.user = req;
 					$rootScope.auth = $scope.auth = true;	
 					$window.location.reload();
 				}else{

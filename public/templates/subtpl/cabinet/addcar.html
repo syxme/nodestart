@@ -96,11 +96,53 @@
 	                        </div>
 	                        <div class="optional"><span class="field-validation-valid">{{errors.key}}</span></div>
 	                    </li>
+	                    <style type="text/css">
+	                    .upload-input{
+							background-color: #EDF0F8;
+							width: 100%;
+							height: 60px;
+							border: 1px solid #DCE8F7;
+							text-align: center;
+							color: #738392;
+							font-size: 1.18em;
+							overflow: hidden;
+							line-height: 16px;
+							position: relative;
+						}
+	                    .input-invisibil{
+							filter: alpha(opacity=1);
+							-moz-opacity: 0.00;
+							opacity: 0.00;
+							cursor: pointer;
+							height: 58px;
+							width: 937px;;
+							  position: absolute;
+							  left: 0px;
+							}
+						.upload-input:hover{
+							background-color: #E2E9F1;	
+						}
+
+
+						.s2-photo-upload{
+							padding-top: 22px;
+						}
+						.s2-photo-upload >span{
+							background: url('http://vk.com/images/camera.png') left 0px no-repeat;
+							text-align: center;
+							padding: 3px 0px 3px 35px;
+							color: #738392!important;
+							font-size: 1.18em!important;
+							line-height: 16px!important;
+						}
+	                    </style>
 	                    <li ng-class="{error: errors.photo}">
-	                    	<input  uploader="uploader" nv-file-select type="file" id="files" name="image" />
-	                    	<div class="clearfix">
-	                        	<label class="alpha grid_3">Загрузка фото</label>
-	                        </div>
+	                   	 	<div class="upload-input">
+	                    		<input  class="input-invisibil" uploader="uploader" nv-file-select type="file" id="files" name="image" />
+	                    		<div class="s2-photo-upload">
+									<span>Добавить фотографию</span>
+								</div>
+	                    	</div>
 	                        <style type="text/css">
 	                        	.imagelist{
 								  list-style: none;

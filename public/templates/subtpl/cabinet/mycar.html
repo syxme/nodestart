@@ -60,7 +60,7 @@
 		<ul class="cabinetCars">
 			<li ng-repeat="car in cars">
 				<div class="img">
-					<img src="http://img.copartimages.com/website/data/pix/20150409/21353805_1X.JPG">
+					<img ng-src="{{car.photo[0]}}">
 				</div>
 				<div class="headname">{{car.marka}} {{car.model}} {{car.year}}</div>
 				<div class="descript">
