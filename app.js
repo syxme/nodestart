@@ -2,7 +2,6 @@ var express	= require('express'),
 	app 	= express(),
 	server	= require('http').createServer(app),
 	redis	= require('redis'),
-	cons		= require('consolidate'),
 	bodyParser	= require('body-parser'),
 	cookieParser= require('cookie-parser'),
 	session		= require('express-session'),
@@ -11,16 +10,11 @@ var express	= require('express'),
 	redisStore	= require('connect-redis')(session);
 
 
-
-app.set('views', './public');
-app.engine('hbs', cons.handlebars);
-app.set('view engine', 'hbs');
-
 app.use(express.static('public'));
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
-//openshift app.use(session({ secret: "dfI3dD43220jhsdjjjsdkoen" }));
+
 app.use(session(
 	{
 		secret: '4815162342x1x2', 
@@ -30,8 +24,8 @@ app.use(session(
 }));
 var config = require("./system/config");
 var routers = require("./system/router")(app);
-var port = process.env.HOST || 2518 ;
-var ip = process.env.PORT || "127.0.0.1";
+var port = process.env.PORT || 2518 ;
+var ip = process.env.HOST || "127.0.0.1";
 
 server.listen(port, ip);
 
