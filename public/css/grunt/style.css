@@ -1,22 +1,42 @@
-html,body{
-height: 100%;
+*{
+  margin: 0;
+  padding: 0;
 }
 body {
-  background-image: url('http://www.gandex.ru/upl/oboi/u17782_2147_aeefae922a02d4ddece4ab103f6.jpg');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  position: relative;
+  min-width: 1000px;
+  text-align: center;
+  font-size: 13px;
+  font-family: Arial,sans-serif;
+  line-height: 1.35;
+  color: #292929; 
 }
-
-.block-login{
-	width: 420px;
-	height: 265px;
-	top: 0;
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: auto;
+header {
+  height: 88px;
+  z-index: 3;
+  width: 100%;
+  background-color: #3C3C3C;
 }
-.box-login{
-
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 990px;
+  display: inline-block;
+  zoom: 1;
+  text-align: left;
+}
+.container, .grid_20, .pull_1, .pull_10, .pull_11, .pull_12, .pull_13, .pull_14, .pull_15, .pull_16, .pull_2, .pull_3, .pull_4, .pull_5, .pull_6, .pull_7, .pull_8, .pull_9, .push_1, .push_10, .push_11, .push_12, .push_13, .push_14, .push_15, .push_16, .push_2, .push_3, .push_4, .push_5, .push_6, .push_7, .push_8, .push_9, .three-cols {
+  position: relative;
+}
+.sub-nav, .sub-nav-back.addedHeight, a.sealed {
+  height: 22px;
+}
+.sub-nav-back {
+  background-color: #d7d7d7;
+  border-bottom: 1px solid #cbcbcb;
+  padding-top: 24px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  height: 25px;
 }

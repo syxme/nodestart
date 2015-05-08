@@ -1,24 +1,9 @@
 var fs = require('fs');
-var setPointRUR = function (num) {
-  var str = "" + num;
-  var zeroPos = str.indexOf(".")+1;
-  var numpos = str.indexOf(".");
-  var ssr = 0;
-  if (zeroPos == -1) return 0;
-  if (!numpos == 0){ 
-    ssr = str.slice(0,numpos);
-    ssr = ssr * 100;
-  }else{
-    ssr = 0;
-  }
-  str = str.slice(zeroPos);
-  ssr = ssr+ Number(str);
-  return +ssr;
+var setRUR = function (num) {
+  return num*100;
 }
 var getRUR = function(num) {
-  var tmp = num % 100;
-  num = (num - tmp) / 100;
-  return num+"."+tmp;
+  return num/100;
 }
 var walk = function(dir, done) { 
   var results = [];

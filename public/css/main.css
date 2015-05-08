@@ -361,7 +361,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
   padding-top: 22px;
 }
 .s2-photo-upload >span{
-  background: url('http://vk.com/images/camera.png') left 0px no-repeat;
+  background: url('../img/camera.png') left 0px no-repeat;
   text-align: center;
   padding: 3px 0px 3px 35px;
   color: #738392!important;

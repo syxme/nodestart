@@ -42,9 +42,9 @@ ObjectId = Schema.Types.ObjectId;
   userSchema.statics.addmoney = function(req,money,cb){
     this.getUser(req,function(err,x){
       if (x.money){
-        money = utl.setPointRUR(money) + utl.setPointRUR(x.money);
+        money = utl.setRUR(money) + utl.setRUR(x.money);
       }else{
-        money = utl.setPointRUR(money); 
+        money = utl.setRUR(money); 
       }
       models.User.update({_id:req.session.user._id},{money:money},function(err,log){
         if (!err){

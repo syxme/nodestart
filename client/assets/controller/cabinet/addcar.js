@@ -4,11 +4,10 @@ app.controller("addcar", [
 	$scope.$root.cabinet = "/templates/subtpl/cabinet/addcar.html";
 	$scope.contentTitle = "Добавить автомобиль";
 	$scope.data = {};
-	$scope.markaAvto = markaAvto;
 	$scope.data.photo = [];
 	$scope.years = [];
 
-	for (var i=1900;i<=2015;i++){$scope.years.push(i);} 
+	//for (var i=1900;i<=2015;i++){$scope.years.push(i);} 
 
     var	uploader = $scope.uploader = new FileUploader({
 		  url: '/api/upload/image',

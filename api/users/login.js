@@ -12,8 +12,10 @@ exports.login = {
 				if (user){
 					if (user.pass == data.pass){
 						req.session.user = user;
-						res.response = ld.omit(user.toObject(),['__v','password','login']);
-						next();				
+						models.User.getUser(req,function(err,e){
+							res.response = e;
+							next();		
+						});						
 					}else{
 						next("not valid");
 					}
