@@ -4,21 +4,17 @@ var app = angular.module("AuctionR", ["ngRoute","ngAnimate","ui.bootstrap","rest
 app.run(["$http", "$rootScope", "$location","$q","$window",function ($http,$rootScope,$location,$q,$window) {
   var defer = $q.defer();
   $rootScope.user = {};
-$http.post("/api/users/auth").success(function(response) {
-    if (response.success){
-      $rootScope.user = response;
-      $rootScope.auth = true;
-    }else{
-      $rootScope.auth = false;
-      $rootScope.user.firstname = "Гость";
-    }
-  }).error(function(data, status, headers, config) {
-      $rootScope.auth = false;
-      $rootScope.user.firstname = "Гость";
-  });
+
+  if (ACU){
+    $rootScope.user = JSON.parse(Base64.decode(ACU));
+    $rootScope.auth = true;
+  }else{
+    $rootScope.auth = false;
+    $rootScope.user.firstname = "Гость";
+  }
   $rootScope.iheader = "/templates/index/header.html";
   $rootScope.icontent = "/templates/index/content.html";
- // $rootScope.title = "AUCTION INTRO";
+
   $rootScope.countrys = function(){
     $http.post('/api/utilits/getcountry').success(function(req) {
       defer.resolve(req.response.items);

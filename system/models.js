@@ -29,7 +29,11 @@ ObjectId = Schema.Types.ObjectId;
         cb(err,false);
       }else{
         if (user){
-          user = ld.omit(user.toObject(),['__v','password','login']);
+          if (user.login!="admin"){
+            user = ld.omit(user.toObject(),['__v','password','login']);
+          }else{
+            user.admin = true;
+          }
           user.money = money = utl.getRUR(user.money);
           cb(false,user);
         }else{
@@ -74,8 +78,8 @@ ObjectId = Schema.Types.ObjectId;
     color:String,
     engine:String,
     keys:String,
-    status:String,
-    auctionDATA:{
+    status:Number, //0 -- ничего, 1 -- на аукционе, 2 -- неопределённо.
+    lot:{
       targetPrice:Number,
       lastbid:{
         user:{
@@ -91,7 +95,7 @@ ObjectId = Schema.Types.ObjectId;
 
   auctionTypeSchema = new Schema({
     name:String,
-    time:Number,
+    timer:Number,
   });
 
   auсtionsSchema = new Schema({

@@ -1,16 +1,14 @@
-var fs = require('fs'),
-	models	= require("./models"),
+var	models	= require("./models"),
 	async	= require("async"),
-	routepr = {},
 	scanApi = require("./utils"),
 	mdres	= require("./middleware/response"),
 	user	= require("./middleware/user"),
 	error	= require("./middleware/error"),
-	index = fs.readFileSync("public/index.hbs", "utf8");
+	index	= require("./middleware/index");
 
 initApi = function(app) {
 	var folder,api;
-
+	
 	scanApi.walk("api", function(err, file) {
 		Object.keys(file).forEach(function (num) {
 			console.log("==============================FILE==============================".yellow);
@@ -26,28 +24,11 @@ initApi = function(app) {
 			});
 		});
 	});
-	app.get('/', function(req, res){res.send(index);});
-	app.get('/:option/', function(req, res,next){ 
-		if (req.params.option!="api"){
-			res.send(index);
-		}else{
-			next();
-		}
-	});
-	app.get('/:option/:optionA/', function(req, res,next){ 
-		if (req.params.option!="api"){
-			res.send(index);
-		}else{
-			next();
-		}
-	});
-	app.get('/:option/:optionA/:optionB/', function(req, res,next){ 
-		if (req.params.option!="api"){
-			res.send(index);
-		}else{
-			next();
-		}
-	});
+
+	app.get('/', index);
+	app.get('/:option/', index);
+	app.get('/:option/:optionA/',index);
+	app.get('/:option/:optionA/:optionB/',index);
 
 };
 

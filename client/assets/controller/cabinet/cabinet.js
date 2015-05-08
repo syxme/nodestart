@@ -1,11 +1,10 @@
 app.controller("cabinet", [
 "$scope", "$http", "$rootScope","$location","$window", function($scope, $http, $rootScope,$location,$window) {
-	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
-	$scope.contentTitle = "Личный Кабинет";
-	$scope.data = {};
-
-	$scope.auth = $rootScope.auth;
-  	if (!$scope.auth){
+	if (!$scope.$root.auth){
   		$location.path("/login/");
   	}
+	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
+	$scope.$root.cabinet = "/templates/subtpl/cabinet/index.html";
+	$scope.contentTitle = "Личный Кабинет";
+	$scope.data = {};
 }]);

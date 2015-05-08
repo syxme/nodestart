@@ -1,5 +1,8 @@
 app.controller("mycar", [
 "$scope","$http","$location","$modal", function($scope, $http, $location,$modal) {
+	if (!$scope.$root.auth){
+  		$location.path("/login/");
+  	}
 	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
 	$scope.$root.cabinet = "/templates/subtpl/cabinet/mycar.html";
 	$scope.contentTitle = "Мои автомобили";
@@ -38,9 +41,4 @@ app.controller("mycar", [
 		  ]
 		});
 	};
-
-	$scope.auth = $scope.$root.auth;
-  	if (!$scope.auth){
-  		$location.path("/login/");
-  	}
 }]);

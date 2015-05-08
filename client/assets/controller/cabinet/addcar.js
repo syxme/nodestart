@@ -1,13 +1,13 @@
 app.controller("addcar", [
-"$scope", "$http", "$rootScope","$location","FileUploader", function($scope, $http, $rootScope,$location,FileUploader) {
+"$scope", "$http","$location","FileUploader", function($scope, $http,$location,FileUploader) {
+	if (!$scope.$root.auth){
+  		$location.path("/login/");
+  	}
 	$scope.$root.content = "/templates/subtpl/cabinet/cabinet.html";
 	$scope.$root.cabinet = "/templates/subtpl/cabinet/addcar.html";
 	$scope.contentTitle = "Добавить автомобиль";
 	$scope.data = {};
 	$scope.data.photo = [];
-	$scope.years = [];
-
-	//for (var i=1900;i<=2015;i++){$scope.years.push(i);} 
 
     var	uploader = $scope.uploader = new FileUploader({
 		  url: '/api/upload/image',
@@ -36,8 +36,4 @@ app.controller("addcar", [
 
 	};
 	
-	$scope.auth = $rootScope.auth;
-  	if (!$scope.auth){
-  		$location.path("/login/");
-  	}
 }]);

@@ -1,0 +1,84 @@
+<div class="content container registration">
+	<div id="registration-form">
+	    <div class="module">
+	        <form class="ui-form" id="entry">
+	            <fieldset>
+	                <h5>Описание</h5>
+	                <h8 class="required-desc">* Обязательное поле</h8>
+	                <ul class="entry-group">
+	                    <li ng-class="{error: errors.marka}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Тип аукциона</label>
+	                        	<select ng-change="uptime()" ng-model="data.marka" class="select grid_6 omega normal" type="select">
+									<option value="{{tp.timer}}" ng-repeat="tp in auctionType">{{tp.name}}</option>
+                        		</select>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.login}}</span></div>
+	                    </li>
+						<li ng-class="{error: errors.model}">
+	                    	<div class="clearfix">
+	                        	<label class="alpha grid_3">* Время начала</label>
+	                        	<div>
+	                        		<input class="text grid_1" placeholder="Число" ng-model="date.date" type="text">
+	                        		<input class="text grid_1" placeholder="Месяц" ng-model="date.month" type="text">
+	                        		<input class="text grid_1" placeholder="Год" ng-model="date.year" type="text">
+	                        		<input class="text grid_1" placeholder="Час" ng-model="date.hours" type="text">
+	                        	</div>
+	                        </div>
+	                        <div class="optional"><span class="field-validation-valid">{{errors.model}}</span></div>
+	                    </li>
+
+	                    <li ng-class="{error: errors.probeg}">
+	                        <label class="alpha grid_3">* Пробег(например 150000)</label>
+	                        <input class="group-input omega reg" ng-model="data.probeg" type="text" value="" maxlength="20">
+	                        <div class="optional"><span class="field-validation-valid">{{errors.probeg}}</span></div>
+	                        <div class="clear"></div>
+	                    </li>
+	                </ul>
+	                <div class="regterms">
+	                    Щелкните для отправки данных
+	                </div>
+	                <span ng-click="create()" class="button large blue bt-reg">
+	                    Отправить
+	                </span>
+            	</fieldset>
+	        </form>
+	    </div>
+	</div>
+
+	<div class="sidebar rounded">
+		<div class="module clearfix">
+			<h5 class="header">Добавьте авто: это просто!</h5>
+
+			<div class="registration-steps">
+				<div class="registration-step">
+					<div class="num">1</div>
+					<div class="text">
+					<h4>Шаг 1</h4>
+					<p>Заполните форму на этой странице.</p>
+					</div>
+				</div>
+
+				<!--.registration-step -->
+				<div class="registration-step">
+					<div class="num">2</div>
+					<div class="text">
+						<h4>Шаг 2</h4>
+						<p>Нажмите кнопку "Отправить", и когда мы получим заполненную форму, то отправим вам по электронной почте ваши регистрационные данные, включая идентификатор участника и пароль. Пароль обычно приходит на электронную почту в течение пяти-семи минут.</p>
+					</div>
+				</div>
+
+				<!--.step -->
+				<div class="registration-step">
+					<div class="num">3</div>
+					<div class="text">
+						<h4>Шаг 3</h4>
+						<p>Выполните вход в систему и начните искать транспортные средства.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+</div>

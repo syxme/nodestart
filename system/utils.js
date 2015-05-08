@@ -5,6 +5,29 @@ var setRUR = function (num) {
 var getRUR = function(num) {
   return num/100;
 }
+var listRouteAngularApp = function(){
+  
+  var s = fs.readFileSync("client/assets/routes.js", "utf8"),prm,x;
+  var obj = {};
+  for (var i=1; i<500;i++){
+    if (~s.indexOf('$routeProvider.when("')){
+      s = s.substr(s.indexOf('$routeProvider.when("')+21,s.length);
+      x = s.substr(0,s.indexOf('",'));
+      obj[x] = {};
+      obj[x].url = x;
+      prm = s.substr(s.indexOf('premission:"')+12,s.length);
+      obj[x].premission = prm.substr(0,prm.indexOf('"'));
+      if (obj[x].premission == "user"||obj[x].premission == "admin"){
+        prm = prm.substr(prm.indexOf('redirectX:"')+11,prm.length);
+        obj[x].redirect = prm.substr(0,prm.indexOf('"'));
+      }
+    }else{
+      break;
+    }
+  }
+   return obj;
+}
+
 var walk = function(dir, done) { 
   var results = [];
   fs.readdir(dir, function(err, list) {
@@ -30,7 +53,8 @@ var walk = function(dir, done) {
 var untils = {
   walk:walk,
   getRUR:getRUR,
-  setPointRUR:setPointRUR
+  setRUR:setRUR,
+  listRouteAngularApp:listRouteAngularApp
 
 }
 module.exports = untils;

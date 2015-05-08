@@ -1,7 +1,7 @@
 exports.index = {
 	method	:"get",
 	name	:"",
-	route	:['user'],
+	route	:['admin'],
 	execute	:function(req, res,next) {
 		models.User.find({}, function(err, user) {
 			if (err) {
