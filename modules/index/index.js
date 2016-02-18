@@ -3,11 +3,19 @@ var index = function(){
    var ctx = {};
 }
 
-index.prototype.get = function(callback){
-   var ctx = {
-   		text:[{login:"YES"}]
-   };
-   callback(null,ctx);
+index.prototype.local = function(req,cb){
+ 	cb(null,{});
+}
+
+index.prototype.admin = function(req,cb){
+	var segments = req.segments;
+	var ctx = {
+		title:"Admin Panel",
+		admin:true,
+		authenticated:false
+	};
+
+	cb(null,ctx);
 }
 
 index.prototype.render = function(req,callback){
@@ -16,14 +24,21 @@ index.prototype.render = function(req,callback){
 		text:"HEADER"
 	}
 
-	// async.auto({
-	// 	users:function(cb,results){ models.User.find({}).exec(cb)}
-	// },function(err,results){
-	// 	ctx.text = results.users;
-	// 	ctx.header = Engine.view.index_header({text:[{login:'saf'},{login:"vasa"}]});
-	// 	callback(err,ctx);
-	// });
-	ctx.header = Engine.view.index_header({text:[{login:'saf'},{login:"vasa"}]});
-	callback(null,ctx);
+	var segments = req.segments.segments;
+	if (segments[0]=="admin"){
+	console.log(segments);
+
+		this.admin(req,function(err,context){
+			console.log(context);
+			callback(null,context);
+		});
+	}else{
+		this.local(req,function(err,context){
+			callback(null,context);
+		});
+	}
+
+	//callback(null,ctx);
 }
+
 module.exports  = {index:new index};

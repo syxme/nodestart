@@ -1,4 +1,5 @@
 var fs = require('fs');
+var _ = require("lodash");
 
 var walk = function(dir, done) { 
   var results = [];
@@ -22,26 +23,42 @@ var walk = function(dir, done) {
     });
   });
 };
+
+var merge = function (data) {
+  var main = (_.pick(data, 'context')).context;
+  var sub = _.omit(data, 'context');
+  _.extend(main, sub);
+  return main;
+}
+var segments = function(req){
+  return {
+    segments:_.without(req.path.split("/"), ""),
+    params:req.params
+  }
+}
+
+
 var fname = function(x){
   return x.substring(x.lastIndexOf('/')+1,x.length);
 }
+
 var hbsName = function(x){
   var t = x.substring(x.indexOf('/')+1,x.length);
   t = t.substring(t.length-4,0);
   return t.replace('/',"_");
 }
+
 var frs = function(x){
   var name = x.substring(x.lastIndexOf('/')+1,x.length);
-  return name.substring(name.lastIndexOf(".")+1,name.length);
-  
+  return name.substring(name.lastIndexOf(".")+1,name.length);  
 }
 var Key = function (e){return Object.keys(e)};
 
-var fx = {
+module.exports = hls = {
+  segments:segments,
+  hbsName:hbsName,
+  merge:merge,
   walk:walk,
   fn:fname,
-  frs:frs,
-  hbsName:hbsName,
-  Ke:Key
-}
-module.exports = fx;
+  frs:frs
+};
