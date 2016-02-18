@@ -35,10 +35,13 @@ var frs = function(x){
   return name.substring(name.lastIndexOf(".")+1,name.length);
   
 }
+var Key = function (e){return Object.keys(e)};
+
 var fx = {
   walk:walk,
   fn:fname,
   frs:frs,
-  hbsName:hbsName
+  hbsName:hbsName,
+  Ke:Key
 }
 module.exports = fx;

@@ -1,15 +1,17 @@
 var async = require("async");
+var _ = require("lodash");
+
 var exec = function(req, res) {
 	var ctx = {};
-	async.parallel({
-		header:function(cb,results){context.index.render("rr",cb) },
-		faders:function(cb,results){context.index.get(cb) }
 
+	async.parallel({
+		context	:function(cb,results){modules['index'].render({},cb) },
+		header	:function(cb,results){cb(null,Engine.view.index_header(ctx))},
+		menu	:function(cb,results){modules['menu'].render({},cb) }
 	},function(err,results){
-		ctx = results.header;
-		ctx.faders = results.faders;
-		console.log(results.faders);
-		res.send(Engine.tpl.index_index(ctx));
+		ctx = results.context;
+		ctx = _.extend(ctx,results);
+		res.send(Engine.view.index_layout(ctx));
 	});		
 }
 
